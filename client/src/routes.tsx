@@ -25,7 +25,7 @@ export const createRoutes = (
     icon: (
       <CustomAvatar src={userInfo.profileImage} alt={userInfo.name} size="sm" />
     )
-    // route: `/${userInfo.name}/user-settings`,
+    // route: `/user-settings`,
     // component: <UserSettings />
   },
   { type: CustomRouteType.DIVIDER, key: "divider-0" },

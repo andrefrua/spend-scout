@@ -40,7 +40,7 @@ const BankStatements = () => {
     []
   );
   const [isCategoryFormModalOpen, setIsCategoryFormModalOpen] = useState(false);
-  console.log("categoriesData", categoriesData);
+
   const getRowProps = (row: Row<BankStatement>) => {
     return {
       style: {
