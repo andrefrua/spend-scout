@@ -66,9 +66,4 @@ Transaction.init(
   }
 );
 
-// Define the association with the Category model
-Transaction.belongsTo(Category, {
-  foreignKey: "categoryId"
-});
-
 export default Transaction;

@@ -19,6 +19,7 @@ class Category
   public name!: string;
   public description!: string;
   public filterField!: string;
+  public monthlyBudget!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -49,6 +50,10 @@ Category.init(
     },
     filterField: {
       type: DataTypes.STRING,
+      allowNull: false
+    },
+    monthlyBudget: {
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false
     }
   },

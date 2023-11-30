@@ -80,7 +80,8 @@ router.post(
   authenticateToken,
   async (request: AuthenticatedRequest, response: Response) => {
     try {
-      const { name, type, description, filterField } = request.body;
+      const { name, type, description, filterField, monthlyBudget } =
+        request.body;
       const userId = request.user?.id || "";
 
       const category = await Category.create({
@@ -88,7 +89,8 @@ router.post(
         name,
         type,
         description,
-        filterField
+        filterField,
+        monthlyBudget
       });
 
       response.status(HttpCode.OK).send({ id: category.id });
@@ -115,7 +117,8 @@ router.put(
   async (request: AuthenticatedRequest, response: Response) => {
     try {
       const categoryId = request.params.categoryId;
-      const { name, type, description, filterField } = request.body;
+      const { name, type, description, filterField, monthlyBudget } =
+        request.body;
       const userId = request.user?.id;
 
       const category = await Category.findOne({
@@ -133,6 +136,7 @@ router.put(
       category.type = type;
       category.description = description;
       category.filterField = filterField;
+      category.monthlyBudget = monthlyBudget;
 
       await category.save(); // Save the updated category
 

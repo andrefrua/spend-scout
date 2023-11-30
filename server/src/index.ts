@@ -3,11 +3,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import i18nextMiddleware from "./lib/i18n";
+import sequelize from "./models/sequelize";
 import authRoutes from "./routes/auth";
 import categoryRoutes from "./routes/category";
 import transactionRoutes from "./routes/transaction";
 import dashboardRoutes from "./routes/dashboard";
-import sequelize from "./models/sequelize";
+import setupAssociations from "./models/associations";
 
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
@@ -16,35 +17,36 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const app = express();
-const port = Number(process.env.PORT);
-const hostname = process.env.HOSTNAME || "localhost";
+const port = Number(process.env.PORT) || 3000;
+const host = process.env.HOST || "localhost";
 
-console.log(hostname);
+console.log(
+  `Environment: ${process.env.NODE_ENV} | Hostname: ${host} | Port: ${port}`
+);
 
 app.use(cors());
 app.use(express.json());
 app.use(i18nextMiddleware);
+
+// Setup Sequelize associations
+setupAssociations();
 
 // Synchronize the models with the database
 // sequelize.sync({ force: true })  // Force true to recreate the BD
 sequelize
   .sync()
   .then(() => {
+    app.use(authRoutes);
+    app.use(categoryRoutes);
+    app.use(transactionRoutes);
+    app.use(dashboardRoutes);
+
+    app.listen(port, host, () => {
+      console.log(`Server running at http://${host}:${port}/`);
+    });
+
     console.log("Database synced successfully.");
   })
   .catch(error => {
     console.log("Error syncing database:", error);
   });
-
-app.use(authRoutes);
-app.use(categoryRoutes);
-app.use(transactionRoutes);
-app.use(dashboardRoutes);
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});

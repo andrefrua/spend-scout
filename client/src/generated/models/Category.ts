@@ -10,4 +10,5 @@ export interface Category {
   name: string;
   description: string;
   filterField: string;
+  monthlyBudget: number;
 }

@@ -34,7 +34,8 @@ const CategoryForm = ({
     type: CategoryType.Expense,
     name: "",
     description: "",
-    filterField: ""
+    filterField: "",
+    monthlyBudget: 0
   });
 
   // Fetch existing category data when editing and not in embedded mode
@@ -74,7 +75,8 @@ const CategoryForm = ({
         type: categoryData.type,
         name: categoryData.name,
         description: categoryData.description,
-        filterField: categoryData.filterField
+        filterField: categoryData.filterField,
+        monthlyBudget: categoryData.monthlyBudget
       });
     }
   };

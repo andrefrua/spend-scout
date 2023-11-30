@@ -3,6 +3,7 @@ import { Transaction } from "./transaction";
 export interface TransactionByCategory {
   categoryName: string;
   categoryDescription: string;
+  categoryMonthlyBudget?: number;
   amount: number;
 }
 

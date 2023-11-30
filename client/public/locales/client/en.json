@@ -73,7 +73,8 @@
     "expense": "Expense",
     "income": "Income",
     "type": "Type",
-    "filterField": "Filter field"
+    "filterField": "Filter field",
+    "monthlyBudget": "Monthly budget"
   },
   "transactions": {
     "transactions": "Transactions",
@@ -91,7 +92,9 @@
     "description": "Description",
     "balance": "Balance",
     "amount": "Amount",
-    "category": "Category"
+    "category": "Category",
+    "youAreAboveYourMonthlyBudgetOf": "You are above your monthly budget of {{categoryMonthlyBudget}}",
+    "youAreWithinYourMonthlyBudgetOf": "You are within your monthly budget of {{categoryMonthlyBudget}}"
   },
   "bankStatements": {
     "bankStatement": "Bank Statement",

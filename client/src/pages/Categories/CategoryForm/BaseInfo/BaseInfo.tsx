@@ -79,6 +79,16 @@ const BaseInfo = (): JSX.Element => {
                 success={!errors.filterField && values.filterField.length > 0}
               />
             </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <FormField
+                type="number"
+                name="monthlyBudget"
+                label={t("categories.monthlyBudget")}
+                error={errors.monthlyBudget && touched.monthlyBudget}
+                success={!errors.monthlyBudget && values.monthlyBudget > 0}
+              />
+            </Grid>
           </Grid>
         </CustomBox>
       </Card>

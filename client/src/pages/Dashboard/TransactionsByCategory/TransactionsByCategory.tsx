@@ -43,16 +43,7 @@ const TransactionsByCategory = ({
             sx={{ listStyle: "none" }}>
             {rows.map((row, index) => {
               const key = `${row.categoryName}-${index}`;
-              return (
-                <Transaction
-                  key={key}
-                  color={row.amount > 0 ? "success" : "error"}
-                  icon={row.amount > 0 ? "expand_less" : "expand_more"}
-                  name={row.categoryName}
-                  description={row.categoryDescription}
-                  value={row.amount}
-                />
-              );
+              return <Transaction key={key} transactionByCategory={row} />;
             })}
           </CustomBox>
         ) : (

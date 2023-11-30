@@ -115,6 +115,7 @@ const getTransactionsByCategoryType = async (
     attributes: [
       [col("Category.name"), "categoryName"],
       [col("Category.description"), "categoryDescription"],
+      [col("Category.monthlyBudget"), "categoryMonthlyBudget"],
       [fn("SUM", col("amount")), "amount"]
     ],
     where: {
@@ -124,7 +125,7 @@ const getTransactionsByCategoryType = async (
       },
       "$Category.type$": categoryType // Filter for expense categories
     },
-    group: [col("Category.name"), col("Category.description")],
+    group: [col("Category.name"), col("Category.description"), col("Category.monthlyBudget")],
     include: [{ model: Category, attributes: [] }]
   })) as unknown as TransactionByCategory[];
 

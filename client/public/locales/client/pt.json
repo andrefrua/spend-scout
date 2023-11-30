@@ -73,7 +73,8 @@
     "expense": "Despesa",
     "income": "Rendimento",
     "type": "Tipo",
-    "filterField": "Campo de filtro"
+    "filterField": "Campo de filtro",
+    "monthlyBudget": "Orçamento mensal"
   },
   "transactions": {
     "transactions": "Transacções",
@@ -91,7 +92,9 @@
     "description": "Descrição",
     "balance": "Saldo",
     "amount": "Valor",
-    "category": "Categoria"
+    "category": "Categoria",
+    "youAreAboveYourMonthlyBudgetOf": "Está acima do seu orçamento mensal de {{categoryMonthlyBudget}}",
+    "youAreWithinYourMonthlyBudgetOf": "Está dentro do seu orçamento mensal de {{categoryMonthlyBudget}}"
   },
   "bankStatements": {
     "bankStatement": "Extracto bancário",
