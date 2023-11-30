@@ -7,31 +7,40 @@ import { Card, Grid, Icon, Checkbox, Stack } from "@mui/material";
 import CustomBox from "components/mui/CustomBox";
 import CustomInput from "components/mui/CustomInput";
 import CustomTypography from "components/mui/CustomTypography";
+import CustomButton from "components/mui/CustomButton";
+
 import DataTable from "components/DataTable";
 import { parseNumericValue } from "lib/utils/parseNumericValues";
 import { parseDateValueString } from "lib/utils/parseDateValueString";
 import useCategoriesApi from "hooks/useCategoriesApi";
 import useTransactionsApi from "hooks/useTransactionsApi";
 import { Transaction } from "generated/models/transaction";
+import { Category } from "generated/models/category";
 
 import {
   columnIndexMapping,
   getBankStatementDataTableColumns
 } from "./BankStatements.utils";
 import { BankStatement, SimplifiedTransaction } from "./BankStatements.models";
+import CategoryModal from "./CategoryModal";
 
 const BankStatements = () => {
   const { t, i18n } = useTranslation();
 
   // Fetch categories from the database using the useCategoriesApi hook
-  const { data: categoriesData } = useCategoriesApi();
+  const {
+    data: categoriesData,
+    createCategory,
+    fetchCategories
+  } = useCategoriesApi();
   const { data: transactionsData, createBulkTransactions } =
     useTransactionsApi();
   const [firstRowHasHeaders, setFirstRowHasHeaders] = useState(true);
   const [bankStatementsData, setBankStatementsData] = useState<BankStatement[]>(
     []
   );
-
+  const [isCategoryFormModalOpen, setIsCategoryFormModalOpen] = useState(false);
+  console.log("categoriesData", categoriesData);
   const getRowProps = (row: Row<BankStatement>) => {
     return {
       style: {
@@ -178,8 +187,8 @@ const BankStatements = () => {
           description: bankStatement.description,
           amount: bankStatement.amount
         });
-        // TODO: This should be translated and may a better modal popup would be good!! // TODO: Use `t` to translate the string and use `
 
+        // TODO: This should be translated and may a better modal popup would be good!!
         if (!window.confirm(confirmMessage)) {
           return; // Skip this row
         }
@@ -191,13 +200,22 @@ const BankStatements = () => {
     await createBulkTransactions(bankStatementsToSave);
   };
 
+  const submitCategoryHandler = async (newCategory: Category) => {
+    const responseApi = await createCategory(newCategory);
+
+    if (responseApi) {
+      await fetchCategories();
+      setIsCategoryFormModalOpen(false);
+    }
+  };
+
   return (
     <Grid container spacing={2} mb={2}>
       <Grid item xs={12}>
         <Card>
           <CustomBox p={3}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={8}>
+              <Grid item xs={12} sm={6}>
                 <CustomInput
                   type="text"
                   placeholder={
@@ -236,6 +254,20 @@ const BankStatements = () => {
                     {t("bankStatements.firstRowHasHeaders")}
                   </CustomTypography>
                 </Stack>
+              </Grid>
+
+              <Grid item xs={12} sm={2}>
+                <CustomBox
+                  display="flex"
+                  flexDirection={{ xs: "column", sm: "row" }}
+                  px={{ xs: 2, sm: 0 }}>
+                  <CustomButton
+                    variant="gradient"
+                    color="secondary"
+                    onClick={() => setIsCategoryFormModalOpen(true)}>
+                    {t("categories.createCategory")}
+                  </CustomButton>
+                </CustomBox>
               </Grid>
             </Grid>
           </CustomBox>
@@ -285,6 +317,17 @@ const BankStatements = () => {
           )}
         </Card>
       </Grid>
+
+      <CategoryModal
+        open={isCategoryFormModalOpen}
+        onSubmit={submitCategoryHandler}
+        onClose={(reason: string) => {
+          if (reason !== "backdropClick") {
+            // We only want to close the modal when actually clicking the close or submit button.
+            setIsCategoryFormModalOpen(false);
+          }
+        }}
+      />
     </Grid>
   );
 };
