@@ -1,6 +1,9 @@
 {
   "name": "spend-scout-server",
   "version": "0.0.1",
+  "engines": {
+    "node": "18.x"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
