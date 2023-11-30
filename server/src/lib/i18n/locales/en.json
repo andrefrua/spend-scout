@@ -1,0 +1,26 @@
+{
+  "auth": {
+    "nameRequired": "Name is required",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "passwordTooShort": "Password is too short",
+    "invalidEmail": "Email is invalid",
+    "emailAlreadyExists": "Email already exists in the system",
+    "errorRegisteringTheUser": "There was an error while trying to register the user",
+    "emailDoesNotExistInTheSystem": "Email does not exist in the system",
+    "passwordIncorrect": "Password is incorrect",
+    "errorLoggingInTheUser": "There was an error while trying to login the user",
+    "sessionExpired": "The session has expired"
+  },
+  "customers": {
+    "customerNotFound": "Customer not found",
+    "errorFetchingCustomer": "There was an error while trying to fetch the customer",
+    "errorCreatingTheCustomer": "There was an error while trying to create the customer",
+    "errorUpdatingTheCustomer": "There was an error while trying to update the customer",
+    "errorRetrievingCustomers": "There was an error while trying to retrieve the customers",
+    "errorDeletingTheCustomer": "There was an error while trying to delete the customer",
+    "customerDeleteSuccessfully": "Customer deleted successfully",
+    "nameRequired": "Name is required",
+    "invalidEmail": "Email is invalid"
+  }
+}

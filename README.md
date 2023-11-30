@@ -1,1 +1,1 @@
-# Expenses
+# SpendScout

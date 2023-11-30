@@ -1,0 +1,26 @@
+{
+  "auth": {
+    "nameRequired": "O Nome é obrigatório",
+    "emailRequired": "O Email é obrigatório",
+    "passwordRequired": "A Palavra-passe é obrigatória",
+    "passwordTooShort": "A Palavra-passe é demasiado curta",
+    "invalidEmail": "O Email é inválido",
+    "emailAlreadyExists": "O Email já existe no sistema",
+    "errorRegisteringTheUser": "Ocorreu um erro ao tentar registar o utilizador",
+    "emailDoesNotExistInTheSystem": "O Email não existe no sistema",
+    "passwordIncorrect": "A Palavra-passe está incorrecta",
+    "errorLoggingInTheUser": "Ocorreu um erro ao tentar autenticar o utilizador",
+    "sessionExpired": "A sessão expirou"
+  },
+  "customers": {
+    "customerNotFound": "Cliente não encontrado",
+    "errorFetchingCustomer": "Ocorreu um erro ao tentar obter o cliente",
+    "errorCreatingTheCustomer": "Ocorreu um erro ao tentar criar o cliente",
+    "errorUpdatingTheCustomer": "Ocorreu um erro ao tentar actualizar o cliente",
+    "errorRetrievingCustomers": "Ocorreu um erro ao tentar obter os clientes",
+    "errorDeletingTheCustomer": "Ocorreu um erro ao tentar eliminar o cliente",
+    "customerDeleteSuccessfully": "Cliente eliminado com sucesso",
+    "nameRequired": "O Nome é obrigatório",
+    "invalidEmail": "O Email é inválido"
+  }
+}

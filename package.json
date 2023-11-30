@@ -1,0 +1,30 @@
+{
+  "name": "spend-scout",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prod": "concurrently \"npm run prod:server\" \"npm run prod:client\"",
+    "prod:server": "cd server && npm run prod",
+    "prod:client": "cd client && npm run prod",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build": "concurrently \"npm run build:server\" \"npm run build:client\"",
+    "build:server": "cd server && npm run build",
+    "build:client": "cd client && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrefrua/spend-scout.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrefrua/spend-scout/issues"
+  },
+  "homepage": "https://github.com/andrefrua/spend-scout#readme",
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "packages/**/src/**/*.{html,css,js,jsx,ts,tsx}": "prettier --write",
+  "packages/**/src/**/*.{js,jsx,ts,tsx}": "eslint --fix",
+  "samples/**/src/**/*.{html,css,js,jsx,ts,tsx}": "prettier --write",
+  "samples/**/src/**/*.{js,jsx,ts,tsx}": "eslint --fix"
+}
