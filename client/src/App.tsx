@@ -15,12 +15,7 @@ import {
   RadialLinearScale
 } from "chart.js";
 
-import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-
-// Themes
-import theme from "assets/theme";
-import themeDark from "assets/theme-dark";
 
 import CustomRoutes from "components/CustomRoutes";
 import MainLayout from "components/layouts/MainLayout";
@@ -29,7 +24,6 @@ import Loading from "components/Loading";
 import { useAuthContext } from "context/AuthProvider";
 import { useUIContext } from "context/UIProvider";
 import { useBrandingContext } from "context/BrandingProvider";
-import SnackbarProvider from "context/SnackbarProvider";
 
 import { initI18Next } from "lib/i18n";
 
@@ -48,7 +42,7 @@ initI18Next();
 
 const App = () => {
   const {
-    state: { isDarkMode, verticalNavItemColor }
+    state: { verticalNavItemColor }
   } = useUIContext();
 
   const {
@@ -86,17 +80,15 @@ const App = () => {
   };
 
   return (
-    <ThemeProvider theme={isDarkMode ? themeDark : theme}>
-      <SnackbarProvider>
-        <CssBaseline />
+    <>
+      <CssBaseline />
 
-        <Helmet>
-          <title>{brandName}</title>
-        </Helmet>
+      <Helmet>
+        <title>{brandName}</title>
+      </Helmet>
 
-        {renderContent()}
-      </SnackbarProvider>
-    </ThemeProvider>
+      {renderContent()}
+    </>
   );
 };
 

@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Row } from "react-table";
 
 import { Card, Grid, Icon, Checkbox, Stack } from "@mui/material";
 
@@ -16,10 +15,14 @@ import useCategoriesApi from "hooks/useCategoriesApi";
 import useTransactionsApi from "hooks/useTransactionsApi";
 import { Transaction } from "generated/models/transaction";
 import { Category } from "generated/models/category";
+import useBlockNavigationPrompt from "hooks/useBlockNavigationPrompt";
 
 import {
   columnIndexMapping,
-  getBankStatementDataTableColumns
+  getBankStatementDataTableColumns,
+  getRowProps,
+  isTransactionAlreadySaved,
+  simplifyTransaction
 } from "./BankStatements.utils";
 import { BankStatement, SimplifiedTransaction } from "./BankStatements.models";
 import CategoryModal from "./CategoryModal";
@@ -27,8 +30,8 @@ import Legend from "./Legend";
 
 const BankStatements = () => {
   const { t, i18n } = useTranslation();
+  const { setShouldBlock } = useBlockNavigationPrompt();
 
-  // Fetch categories from the database using the useCategoriesApi hook
   const {
     data: categoriesData,
     createCategory,
@@ -41,19 +44,7 @@ const BankStatements = () => {
     []
   );
   const [isCategoryFormModalOpen, setIsCategoryFormModalOpen] = useState(false);
-
-  const getRowProps = (row: Row<BankStatement>) => {
-    const acceptedColor = "#CCFFCC";
-    const duplicatedColor = row?.original?.duplicated ? "#ADD8E6" : "#FFD1DC";
-
-    return {
-      style: {
-        backgroundColor: row?.original?.accepted
-          ? acceptedColor
-          : duplicatedColor
-      }
-    };
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const bankStatementDataTableColumns = useMemo(
     () =>
@@ -66,51 +57,6 @@ const BankStatements = () => {
       ),
     [t, i18n.language, categoriesData, bankStatementsData]
   );
-
-  const simplifyTransaction = (
-    originalObj: Transaction | BankStatement | SimplifiedTransaction,
-    includeCategory: boolean
-  ): SimplifiedTransaction => {
-    const simplifiedTransaction: SimplifiedTransaction = {
-      transactionDate: new Date(originalObj.transactionDate)
-        .toISOString()
-        .split("T")[0],
-      valueDate: new Date(originalObj.valueDate).toISOString().split("T")[0],
-      description: originalObj.description,
-      balance: Number(originalObj.balance),
-      amount: Number(originalObj.amount)
-    };
-
-    if (includeCategory) {
-      simplifiedTransaction.categoryId = originalObj.categoryId;
-    }
-    return simplifiedTransaction;
-  };
-
-  const isTransactionAlreadySaved = (
-    transactionToCheck: Transaction | BankStatement | SimplifiedTransaction,
-    includeCategory: boolean
-  ): boolean => {
-    // Creates an array with simplified transactions (only properties to compare)
-    const savedSimplifiedTransactions = transactionsData.map(transaction =>
-      simplifyTransaction(transaction, includeCategory)
-    );
-
-    // Converts the objects into a JSON string in order to easily compare them
-    const savedSimplifiedTransactionsSet = new Set(
-      savedSimplifiedTransactions.map(savedSimplifiedTransaction =>
-        JSON.stringify(savedSimplifiedTransaction)
-      )
-    );
-
-    const simplifiedTransactionToCheckString = JSON.stringify(
-      simplifyTransaction(transactionToCheck, includeCategory)
-    );
-
-    return savedSimplifiedTransactionsSet.has(
-      simplifiedTransactionToCheckString
-    );
-  };
 
   const convertImportedData = (importedData: string) => {
     // Excel sheets lines are separated by \n so we need to split the data
@@ -177,6 +123,7 @@ const BankStatements = () => {
         }
 
         convertedRow.duplicated = isTransactionAlreadySaved(
+          transactionsData,
           convertedRow as BankStatement,
           false
         );
@@ -185,6 +132,8 @@ const BankStatements = () => {
       });
 
       setBankStatementsData(convertedRows);
+
+      setTimeout(() => setShouldBlock(!isSubmitting), 0);
     }
   };
 
@@ -201,6 +150,9 @@ const BankStatements = () => {
   };
 
   const saveTransactionsHandler = async () => {
+    setIsSubmitting(true);
+    setShouldBlock(false);
+
     // Filters the bank statements that were accepted and have a category
     const acceptedbankStatements = bankStatementsData
       .filter(
@@ -212,7 +164,7 @@ const BankStatements = () => {
     const bankStatementsToSave: SimplifiedTransaction[] = [];
 
     acceptedbankStatements.forEach(bankStatement => {
-      if (isTransactionAlreadySaved(bankStatement, true)) {
+      if (isTransactionAlreadySaved(transactionsData, bankStatement, true)) {
         // Ask the user for confirmation
         const confirmMessage = t("bankStatements.confirmRecordDuplication", {
           description: bankStatement.description,
@@ -230,6 +182,7 @@ const BankStatements = () => {
 
     await createBulkTransactions(bankStatementsToSave as Transaction[]);
     setBankStatementsData([]);
+    setIsSubmitting(false);
   };
 
   const submitCategoryHandler = async (newCategory: Category) => {

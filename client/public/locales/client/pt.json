@@ -22,7 +22,10 @@
     "hours": "horas",
     "days": "dias",
     "add": "Adicionar",
-    "description": "Descrição"
+    "description": "Descrição",
+    "thereAreUnsavedChanges": "Existem alterações não guardadas",
+    "byLeavingThePageYouWillLoseTheChanges": "Ao sair da página irá perder as alterações, tem a certeza que pretende continuar?",
+    "confirm": "Confirmar"
   },
   "routes": {
     "dashboard": "Dashboard",

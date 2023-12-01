@@ -22,7 +22,10 @@
     "hours": "hours",
     "days": "days",
     "add": "Add",
-    "description": "Description"
+    "description": "Description",
+    "thereAreUnsavedChanges": "There are unsaved changes",
+    "byLeavingThePageYouWillLoseTheChanges": "By leaving the page you will lose the changes, do you wish to continue?",
+    "confirm": "Confirm"
   },
   "routes": {
     "dashboard": "Dashboard",

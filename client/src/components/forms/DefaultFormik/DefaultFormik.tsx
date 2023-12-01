@@ -1,9 +1,11 @@
-import { Form, Formik } from "formik";
+import { useState } from "react";
+import { Form, Formik, FormikHelpers } from "formik";
 
 import Grid from "@mui/material/Grid";
 
 import CustomBox from "components/mui/CustomBox";
 import ActionBar from "components/forms/ActionBar";
+import useBlockNavigationPrompt from "hooks/useBlockNavigationPrompt";
 
 import ErrorBar from "../ErrorBar";
 import LoadingBar from "../LoadingBar";
@@ -20,13 +22,26 @@ const DefaultFormik = <T extends object>({
   isLoading,
   children
 }: DefaultFormikProps<T>) => {
+  const { setShouldBlock } = useBlockNavigationPrompt();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const submitHandler = async (values: T, formikHelpers: FormikHelpers<T>) => {
+    setIsSubmitting(true);
+    setShouldBlock(false);
+    await onSubmit(values, formikHelpers);
+    setIsSubmitting(false);
+  };
+
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
       validationSchema={validationSchema}
-      onSubmit={onSubmit}>
-      {() => {
+      onSubmit={submitHandler}>
+      {({ dirty }) => {
+        // The setTimeout is needed to a limiation in Formik: https://stackoverflow.com/questions/61031464/setstate-called-in-render-prop-is-causing-a-react-warning
+        setTimeout(() => setShouldBlock(dirty && !isSubmitting), 0);
+
         return (
           <Form>
             <Grid container spacing={3} mb={2}>
