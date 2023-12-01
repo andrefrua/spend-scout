@@ -28,7 +28,7 @@ const YearMonthSelector = ({
     newYear: number | null
   ) => {
     if (newYear !== null) {
-      onDateChange?.(new Date(newYear, selectedDate.getMonth(), 1));
+      onDateChange?.(new Date(newYear, selectedDate.getMonth(), 15));
     }
   };
 
@@ -38,7 +38,7 @@ const YearMonthSelector = ({
   ) => {
     if (newMonth !== null) {
       onDateChange?.(
-        new Date(selectedDate.getFullYear(), newMonth.monthNumber - 1, 1)
+        new Date(selectedDate.getFullYear(), newMonth.monthNumber - 1, 15)
       );
     }
   };

@@ -20,7 +20,7 @@ const useDashboardApi = () => {
         setIsLoading(true);
 
         const dashboard = await get(
-          `/dashboard?selectedDate=${selectedDate.toISOString()}`
+          `/dashboard?selectedDate=${selectedDate.toISOString().split("T")[0]}`
         );
 
         return dashboard;
