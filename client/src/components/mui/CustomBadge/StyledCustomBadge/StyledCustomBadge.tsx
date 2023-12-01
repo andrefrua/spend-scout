@@ -127,8 +127,8 @@ const StyledCustomBadge = styled(
       border: borderValue,
       borderRadius: borderRadiusValue,
       ...(indicator && indicatorStyles(size)),
-      ...(variant === "gradient" && gradientStyles(color)),
-      ...(variant === "contained" && containedStyles(color)),
+      ...(variant === "gradient" && color && gradientStyles(color)),
+      ...(variant === "contained" && color && containedStyles(color)),
       ...(!children && !container && standAloneStyles()),
       ...(container && containerStyles())
     }

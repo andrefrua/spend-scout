@@ -5,7 +5,7 @@ import { CustomBadgeProps } from "./CustomBadge.models";
 
 const CustomBadge = forwardRef<HTMLElement, CustomBadgeProps>((props, ref) => {
   const {
-    color = "info",
+    color,
     variant = "gradient",
     size = "sm",
     circular = false,

@@ -102,7 +102,10 @@
     "bankStatementDataImportedFromExcel": "Dados do extracto bancário importados do Excel",
     "firstRowHasHeaders": "A primeira linha tem cabeçalhos",
     "pasteTheBankStatementHere": "Cole aqui o extracto bancário",
-    "confirmRecordDuplication": "O registo '{{description}}' e valor {{amount}} já existe. Confirme que o quer adicionar novamente?"
+    "confirmRecordDuplication": "O registo '{{description}}' e valor {{amount}} já existe. Confirme que o quer adicionar novamente?",
+    "accepted": "Aceite",
+    "duplicated": "Duplicado",
+    "notAccepted": "Não aceite"
   },
   "yearMonthSelector": {
     "selectYear": "Seleccione o ano",

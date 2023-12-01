@@ -102,7 +102,10 @@
     "bankStatementDataImportedFromExcel": "Bank Statement Data imported from Excel",
     "firstRowHasHeaders": "First row has headers",
     "pasteTheBankStatementHere": "Paste the bank statement here",
-    "confirmRecordDuplication": "The record '{{description}}' and value {{amount}} already exists. Do you want to add it again?"
+    "confirmRecordDuplication": "The record '{{description}}' and value {{amount}} already exists. Do you want to add it again?",
+    "accepted": "Accepted",
+    "duplicated": "Duplicated",
+    "notAccepted": "Not accepted"
   },
   "yearMonthSelector": {
     "selectYear": "Select year",

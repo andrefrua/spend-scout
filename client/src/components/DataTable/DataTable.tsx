@@ -39,6 +39,7 @@ const actionsCellColumn = <T extends object>(
     Header: "",
     id: "actions",
     width: "auto",
+    disableSortBy: true,
     ...actionsCellProps,
     Cell: ({ row }: CellProps<T>) => (
       <ActionsCell

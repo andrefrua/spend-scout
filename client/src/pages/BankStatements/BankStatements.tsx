@@ -23,6 +23,7 @@ import {
 } from "./BankStatements.utils";
 import { BankStatement, SimplifiedTransaction } from "./BankStatements.models";
 import CategoryModal from "./CategoryModal";
+import Legend from "./Legend";
 
 const BankStatements = () => {
   const { t, i18n } = useTranslation();
@@ -42,9 +43,14 @@ const BankStatements = () => {
   const [isCategoryFormModalOpen, setIsCategoryFormModalOpen] = useState(false);
 
   const getRowProps = (row: Row<BankStatement>) => {
+    const acceptedColor = "#CCFFCC";
+    const duplicatedColor = row?.original?.duplicated ? "#ADD8E6" : "#FFD1DC";
+
     return {
       style: {
-        backgroundColor: row?.original?.accepted ? "#CCFFCC" : "#FFD1DC"
+        backgroundColor: row?.original?.accepted
+          ? acceptedColor
+          : duplicatedColor
       }
     };
   };
@@ -60,6 +66,51 @@ const BankStatements = () => {
       ),
     [t, i18n.language, categoriesData, bankStatementsData]
   );
+
+  const simplifyTransaction = (
+    originalObj: Transaction | BankStatement | SimplifiedTransaction,
+    includeCategory: boolean
+  ): SimplifiedTransaction => {
+    const simplifiedTransaction: SimplifiedTransaction = {
+      transactionDate: new Date(originalObj.transactionDate)
+        .toISOString()
+        .split("T")[0],
+      valueDate: new Date(originalObj.valueDate).toISOString().split("T")[0],
+      description: originalObj.description,
+      balance: Number(originalObj.balance),
+      amount: Number(originalObj.amount)
+    };
+
+    if (includeCategory) {
+      simplifiedTransaction.categoryId = originalObj.categoryId;
+    }
+    return simplifiedTransaction;
+  };
+
+  const isTransactionAlreadySaved = (
+    transactionToCheck: Transaction | BankStatement | SimplifiedTransaction,
+    includeCategory: boolean
+  ): boolean => {
+    // Creates an array with simplified transactions (only properties to compare)
+    const savedSimplifiedTransactions = transactionsData.map(transaction =>
+      simplifyTransaction(transaction, includeCategory)
+    );
+
+    // Converts the objects into a JSON string in order to easily compare them
+    const savedSimplifiedTransactionsSet = new Set(
+      savedSimplifiedTransactions.map(savedSimplifiedTransaction =>
+        JSON.stringify(savedSimplifiedTransaction)
+      )
+    );
+
+    const simplifiedTransactionToCheckString = JSON.stringify(
+      simplifyTransaction(transactionToCheck, includeCategory)
+    );
+
+    return savedSimplifiedTransactionsSet.has(
+      simplifiedTransactionToCheckString
+    );
+  };
 
   const convertImportedData = (importedData: string) => {
     // Excel sheets lines are separated by \n so we need to split the data
@@ -125,6 +176,11 @@ const BankStatements = () => {
           convertedRow.accepted = true;
         }
 
+        convertedRow.duplicated = isTransactionAlreadySaved(
+          convertedRow as BankStatement,
+          false
+        );
+
         return { ...convertedRow } as BankStatement;
       });
 
@@ -144,19 +200,6 @@ const BankStatements = () => {
     );
   };
 
-  const transformObject = (
-    originalObj: Transaction | BankStatement
-  ): SimplifiedTransaction => ({
-    transactionDate: new Date(originalObj.transactionDate)
-      .toISOString()
-      .split("T")[0],
-    valueDate: new Date(originalObj.valueDate).toISOString().split("T")[0],
-    description: originalObj.description,
-    balance: Number(originalObj.balance),
-    amount: Number(originalObj.amount),
-    categoryId: originalObj.categoryId
-  });
-
   const saveTransactionsHandler = async () => {
     // Filters the bank statements that were accepted and have a category
     const acceptedbankStatements = bankStatementsData
@@ -164,24 +207,12 @@ const BankStatements = () => {
         bankStatement =>
           bankStatement.accepted && bankStatement.categoryId !== undefined
       )
-      .map(bankStatement => transformObject(bankStatement));
-
-    // Created an array with the transaction with only properties to compare
-    const savedTransactions = transactionsData.map(transaction =>
-      transformObject(transaction)
-    );
-
-    // Create a Set of saved transactions using JSON strings
-    const savedTransactionsSet = new Set(
-      savedTransactions.map(obj => JSON.stringify(obj))
-    );
+      .map(bankStatement => simplifyTransaction(bankStatement, true));
 
     const bankStatementsToSave: SimplifiedTransaction[] = [];
 
     acceptedbankStatements.forEach(bankStatement => {
-      const bankStatementString = JSON.stringify(bankStatement);
-
-      if (savedTransactionsSet.has(bankStatementString)) {
+      if (isTransactionAlreadySaved(bankStatement, true)) {
         // Ask the user for confirmation
         const confirmMessage = t("bankStatements.confirmRecordDuplication", {
           description: bankStatement.description,
@@ -197,7 +228,8 @@ const BankStatements = () => {
       bankStatementsToSave.push(bankStatement);
     });
 
-    await createBulkTransactions(bankStatementsToSave);
+    await createBulkTransactions(bankStatementsToSave as Transaction[]);
+    setBankStatementsData([]);
   };
 
   const submitCategoryHandler = async (newCategory: Category) => {
@@ -273,47 +305,50 @@ const BankStatements = () => {
           </CustomBox>
 
           {bankStatementsData.length > 0 && (
-            <DataTable
-              entriesPerPage={{
-                defaultValue: "1000",
-                entries: ["1000"],
-                canChange: false
-              }}
-              title={t("bankStatements.bankStatementData") || ""}
-              subTitle={
-                t("bankStatements.bankStatementDataImportedFromExcel") || ""
-              }
-              table={{
-                columns: bankStatementDataTableColumns,
-                rows: bankStatementsData
-              }}
-              onAdd={saveTransactionsHandler}
-              labels={{
-                addButton: t("common.save") || ""
-              }}
-              isAddButtonDisabled={!isSaveButtonEnabled()}
-              onSelect={row => {
-                const newData = bankStatementsData.map((auxRow, index) => {
-                  if (row.index === index && auxRow.categoryId) {
-                    return { ...auxRow, accepted: true };
-                  }
-                  return auxRow;
-                });
+            <>
+              <Legend />
+              <DataTable
+                entriesPerPage={{
+                  defaultValue: "1000",
+                  entries: ["1000"],
+                  canChange: false
+                }}
+                title={t("bankStatements.bankStatementData") || ""}
+                subTitle={
+                  t("bankStatements.bankStatementDataImportedFromExcel") || ""
+                }
+                table={{
+                  columns: bankStatementDataTableColumns,
+                  rows: bankStatementsData
+                }}
+                onAdd={saveTransactionsHandler}
+                labels={{
+                  addButton: t("common.save") || ""
+                }}
+                isAddButtonDisabled={!isSaveButtonEnabled()}
+                onSelect={row => {
+                  const newData = bankStatementsData.map((auxRow, index) => {
+                    if (row.index === index && auxRow.categoryId) {
+                      return { ...auxRow, accepted: true };
+                    }
+                    return auxRow;
+                  });
 
-                setBankStatementsData(newData);
-              }}
-              onDelete={row => {
-                const newData = bankStatementsData.map((auxRow, index) => {
-                  if (row.index === index) {
-                    return { ...auxRow, accepted: false };
-                  }
-                  return auxRow;
-                });
+                  setBankStatementsData(newData);
+                }}
+                onDelete={row => {
+                  const newData = bankStatementsData.map((auxRow, index) => {
+                    if (row.index === index) {
+                      return { ...auxRow, accepted: false };
+                    }
+                    return auxRow;
+                  });
 
-                setBankStatementsData(newData);
-              }}
-              getRowProps={getRowProps}
-            />
+                  setBankStatementsData(newData);
+                }}
+                getRowProps={getRowProps}
+              />
+            </>
           )}
         </Card>
       </Grid>

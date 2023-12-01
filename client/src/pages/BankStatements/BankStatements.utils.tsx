@@ -31,7 +31,7 @@ export const getBankStatementDataTableColumns = (
     accessor: "valueDate",
     width: "10%",
     Cell: ({ value }) => (
-      <CustomTypography fontSize="default">
+      <CustomTypography fontSize="default" color="dark">
         {formatDateString(value, language)}
       </CustomTypography>
     )
@@ -39,7 +39,12 @@ export const getBankStatementDataTableColumns = (
   {
     Header: t("transactions.description") || "",
     accessor: "description",
-    width: "20%"
+    width: "20%",
+    Cell: ({ value }) => (
+      <CustomTypography fontSize="default" color="dark">
+        {value}
+      </CustomTypography>
+    )
   },
   {
     Header: t("transactions.amount") || "",

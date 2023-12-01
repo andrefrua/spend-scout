@@ -5,7 +5,7 @@ import { CustomBadgeBaseProps } from "../CustomBadge.models";
 export type StyledCustomBadgeProps = {
   theme?: Theme | any;
   $ownerState: CustomBadgeBaseProps & {
-    color: NonNullable<CustomBadgeBaseProps["color"]>;
+    color: CustomBadgeBaseProps["color"];
     size: NonNullable<CustomBadgeBaseProps["size"]>;
     children: React.ReactNode;
   };
