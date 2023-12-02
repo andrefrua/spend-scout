@@ -10,10 +10,11 @@ const StyledCustomInput = styled(
   transientOptions
 )(({ theme, $ownerState }: StyledCustomInputProps) => {
   const { palette, functions } = theme;
-  const { error, success, disabled } = $ownerState;
+  const { error, success, disabled, isDarkMode } = $ownerState;
 
   const {
-    grey,
+    dark,
+    light,
     transparent,
     error: colorError,
     success: colorSuccess
@@ -58,8 +59,10 @@ const StyledCustomInput = styled(
     }
   });
 
+  const disabledBackgroundColor = isDarkMode ? dark.main : light.main;
+
   return {
-    backgroundColor: disabled ? `${grey[200]} !important` : transparent.main,
+    backgroundColor: disabled ? disabledBackgroundColor : transparent.main,
     pointerEvents: disabled ? "none" : "auto",
     ...(error && errorStyles()),
     ...(success && successStyles())

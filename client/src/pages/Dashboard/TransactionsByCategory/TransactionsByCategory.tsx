@@ -1,11 +1,13 @@
 import { useTranslation } from "react-i18next";
 
+import { Theme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
 import CustomTypography from "components/mui/CustomTypography";
 import CustomBox from "components/mui/CustomBox";
 import { CategoryType } from "generated/models/category";
+import { useUIContext } from "context/UIProvider";
 
 import Transaction from "./Transaction/Transaction";
 import { TransactionsByCategoryProps } from "./TransactionsByCategory.models";
@@ -16,6 +18,9 @@ const TransactionsByCategory = ({
   categoryType
 }: TransactionsByCategoryProps): JSX.Element => {
   const { t } = useTranslation();
+  const {
+    state: { isDarkMode }
+  } = useUIContext();
 
   return (
     <Card sx={{ height: "100%" }}>
@@ -53,7 +58,16 @@ const TransactionsByCategory = ({
                 display="grid"
                 justifyContent="center"
                 alignItems="center"
-                bgColor="white"
+                // bgColor="white"
+                sx={(theme: Theme) => {
+                  const { palette } = theme;
+
+                  return {
+                    backgroundColor: isDarkMode
+                      ? palette.light.secondary
+                      : palette.dark.secondary
+                  };
+                }}
                 color={
                   categoryType === CategoryType.Income ? "error" : "success"
                 }

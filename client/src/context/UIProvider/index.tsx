@@ -4,7 +4,7 @@ export default UIProvider;
 
 export { default as useUIContext } from "./useUIContext";
 export {
-  toggleUISettingsPanelOpen,
+  setUISettingsPanelOpen,
   setIsVerticalNavCollapsed,
   setIsDarkMode,
   setIsNavBarFixed,

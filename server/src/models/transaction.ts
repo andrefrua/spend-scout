@@ -1,7 +1,6 @@
 import { Model, DataTypes, Optional } from "sequelize";
 
 import sequelize from "./sequelize";
-import Category from "./category"; // Import the Category model
 import { Transaction as TransactionAttributes } from "./interfaces/transaction";
 
 interface TransactionCreationAttributes

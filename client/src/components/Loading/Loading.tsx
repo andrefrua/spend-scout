@@ -1,5 +1,6 @@
 import { Palette, styled } from "@mui/material";
-import { VerticalNavItemColor } from "components/layouts/MainLayout/VerticalNav/VerticalNavItem/VerticalNavItem.models";
+
+import { VerticalNavItemColor } from "generated/models/userPreferences";
 
 // Define an interface for your custom props
 interface LoadingProps {

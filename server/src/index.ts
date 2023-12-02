@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth";
 import categoryRoutes from "./routes/category";
 import transactionRoutes from "./routes/transaction";
 import dashboardRoutes from "./routes/dashboard";
+import userPreferencesRoutes from "./routes/userPreferences";
 import setupAssociations from "./models/associations";
 
 if (process.env.NODE_ENV !== "production") {
@@ -40,6 +41,7 @@ sequelize
     app.use(categoryRoutes);
     app.use(transactionRoutes);
     app.use(dashboardRoutes);
+    app.use(userPreferencesRoutes);
 
     app.listen(port, host, () => {
       console.log(`Server running at http://${host}:${port}/`);

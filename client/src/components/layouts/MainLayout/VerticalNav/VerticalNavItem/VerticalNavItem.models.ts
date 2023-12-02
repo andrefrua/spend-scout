@@ -1,16 +1,7 @@
 import { HTMLAttributes } from "react";
 import { ListItemProps } from "@mui/material/ListItem";
 
-export enum VerticalNavItemColor {
-  PRIMARY = "primary",
-  SECONDARY = "secondary",
-  INFO = "info",
-  SUCCESS = "success",
-  WARNING = "warning",
-  ERROR = "error",
-  DARK = "dark",
-  LIGHT = "light"
-}
+import { VerticalNavItemColor } from "generated/models/userPreferences";
 
 type VerticalNavItemActive = boolean | string;
 

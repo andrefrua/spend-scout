@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Theme } from "@mui/material/styles";
 
 import { useUIContext } from "context/UIProvider";
@@ -16,7 +16,7 @@ import UISettingsPanel from "./UISettingsPanel";
 const MainLayout = ({ children }: MainLayoutProps): JSX.Element => {
   const {
     state: { isVerticalNavCollapsed },
-    actions: { setIsVerticalNavCollapsed }
+    actions: { setIsVerticalNavCollapsed, setUISettingsPanelOpen }
   } = useUIContext();
 
   const [onMouseEnter, setOnMouseEnter] = useState(false);
@@ -36,6 +36,34 @@ const MainLayout = ({ children }: MainLayoutProps): JSX.Element => {
       setOnMouseEnter(false);
     }
   };
+
+  const panelRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const targetElement = event.target as HTMLElement;
+
+      const isUISettingsPanelToggle = targetElement.closest(
+        "button[data-ui-settings-panel-toggle]"
+      );
+
+      if (
+        panelRef.current &&
+        !(panelRef.current as HTMLElement).contains(targetElement) &&
+        !isUISettingsPanelToggle
+      ) {
+        setUISettingsPanelOpen(false);
+      }
+    };
+
+    // Add event listener when the component mounts
+    document.addEventListener("click", handleClickOutside);
+
+    // Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [setUISettingsPanelOpen]);
 
   return (
     <CustomBox
@@ -65,7 +93,7 @@ const MainLayout = ({ children }: MainLayoutProps): JSX.Element => {
         <CustomBox>{children}</CustomBox>
       </CustomBox>
 
-      <UISettingsPanel />
+      <UISettingsPanel ref={panelRef} />
 
       <MainFooter />
     </CustomBox>

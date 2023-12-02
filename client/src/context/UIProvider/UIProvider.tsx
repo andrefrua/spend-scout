@@ -1,7 +1,18 @@
-import { createContext, useReducer, useMemo } from "react";
+import {
+  createContext,
+  useReducer,
+  useMemo,
+  useCallback,
+  useEffect,
+  useState
+} from "react";
 
-import { VerticalNavColor } from "components/layouts/MainLayout/VerticalNav/VerticalNav.models";
-import { VerticalNavItemColor } from "components/layouts/MainLayout/VerticalNav/VerticalNavItem/VerticalNavItem.models";
+import useUserPreferencesApi from "hooks/useUserPreferencesApi";
+import {
+  UserPreferences,
+  VerticalNavColor,
+  VerticalNavItemColor
+} from "generated/models/userPreferences";
 
 import {
   UIState,
@@ -11,13 +22,14 @@ import {
   UIActions
 } from "./UIProvider.models";
 import {
-  toggleUISettingsPanelOpen,
+  setUISettingsPanelOpen,
   setIsVerticalNavCollapsed,
   setIsDarkMode,
   setIsNavBarFixed,
   setIsNavBarTransparent,
   setVerticalNavColor,
-  setVerticalNavItemColor
+  setVerticalNavItemColor,
+  setInitialState
 } from "./UIProvider.actions";
 
 /**
@@ -30,14 +42,14 @@ const initialUIState: UIState = {
   isNavBarFixed: true,
   isNavBarTransparent: true,
   verticalNavColor: VerticalNavColor.DARK,
-  verticalNavItemColor: VerticalNavItemColor.WARNING
+  verticalNavItemColor: VerticalNavItemColor.INFO
 };
 
 /**
  * The initial / default Auth actions.
  */
 const initialUIActions: UIActions = {
-  toggleUISettingsPanelOpen: () => undefined,
+  setUISettingsPanelOpen: () => undefined,
   setIsVerticalNavCollapsed: () => undefined,
   setIsDarkMode: () => undefined,
   setIsNavBarFixed: () => undefined,
@@ -55,25 +67,28 @@ const initialUIActions: UIActions = {
  */
 const uiReducer = (state: UIState, action: UIAction): UIState => {
   switch (action.type) {
-    case UIActionType.TOGGLE_UI_SETTINGS_PANEL_OPEN:
+    // TODO: Set this in the actions type
+    case "SET_INITIAL_STATE":
+      return { ...state, ...(action.value as UserPreferences) };
+    case UIActionType.SET_UI_SETTINGS_PANEL_OPEN:
       return { ...state, isUISettingsPanelOpen: action.value as boolean };
-    case UIActionType.TOGGLE_VERTICAL_NAVIGATION_COLLAPSED:
+    case UIActionType.SET_VERTICAL_NAVIGATION_COLLAPSED:
       return {
         ...state,
         isVerticalNavCollapsed: action.value as boolean
       };
-    case UIActionType.TOGGLE_DARK_MODE:
+    case UIActionType.SET_DARK_MODE:
       return { ...state, isDarkMode: action.value as boolean };
-    case UIActionType.TOGGLE_NAVIGATION_BAR_FIXED:
+    case UIActionType.SET_NAVIGATION_BAR_FIXED:
       return { ...state, isNavBarFixed: action.value as boolean };
-    case UIActionType.TOGGLE_NAVIGATION_BAR_TRANSPARENT:
+    case UIActionType.SET_NAVIGATION_BAR_TRANSPARENT:
       return { ...state, isNavBarTransparent: action.value as boolean };
-    case UIActionType.CHANGE_VERTICAL_NAVIGATION_COLOR:
+    case UIActionType.SET_VERTICAL_NAVIGATION_COLOR:
       return {
         ...state,
         verticalNavColor: action.value as VerticalNavColor
       };
-    case UIActionType.CHANGE_VERTICAL_NAVIGATION_ITEM_COLOR:
+    case UIActionType.SET_VERTICAL_NAVIGATION_ITEM_COLOR:
       return {
         ...state,
         verticalNavItemColor: action.value as VerticalNavItemColor
@@ -95,27 +110,76 @@ export const UIContext = createContext<{
 UIContext.displayName = "UIContext";
 
 const UIProvider = ({ children }: UIProviderProps) => {
-  const [state, dispatch] = useReducer(uiReducer, initialUIState);
+  const { data: userPreferences, updateUserPreferences } =
+    useUserPreferencesApi();
+  const [loading, setLoading] = useState(true);
+  const [state, dispatch] = useReducer(uiReducer, {
+    ...initialUIState,
+    ...(userPreferences || {}) // Use userPreferences if available
+  });
+
+  // Use useEffect to update state after the initial render
+  useEffect(() => {
+    if (userPreferences) {
+      setInitialState(dispatch, userPreferences);
+      setLoading(false);
+    }
+  }, [userPreferences]);
+
+  const updateUserPreferencesHandler = useCallback(
+    async (updatedPreferences: UserPreferences): Promise<void> => {
+      try {
+        const newPreferences = {
+          ...userPreferences,
+          ...updatedPreferences
+        };
+        await updateUserPreferences(newPreferences);
+      } catch (error) {
+        console.error("Error updating user preferences:", error);
+      }
+    },
+    [userPreferences, updateUserPreferences]
+  );
 
   const actions = useMemo(
     () => ({
-      toggleUISettingsPanelOpen: (value: boolean) =>
-        toggleUISettingsPanelOpen(dispatch, value),
-      setIsVerticalNavCollapsed: (value: boolean) =>
-        setIsVerticalNavCollapsed(dispatch, value),
-      setIsDarkMode: (value: boolean) => setIsDarkMode(dispatch, value),
-      setIsNavBarFixed: (value: boolean) => setIsNavBarFixed(dispatch, value),
+      setUISettingsPanelOpen: (value: boolean) =>
+        setUISettingsPanelOpen(dispatch, value),
       setIsNavBarTransparent: (value: boolean) =>
         setIsNavBarTransparent(dispatch, value),
-      setVerticalNavColor: (value: string) =>
-        setVerticalNavColor(dispatch, value),
-      setVerticalNavItemColor: (value: string) =>
-        setVerticalNavItemColor(dispatch, value)
+
+      setIsVerticalNavCollapsed: (value: boolean) => {
+        setIsVerticalNavCollapsed(
+          dispatch,
+          value,
+          updateUserPreferencesHandler
+        );
+      },
+      setIsDarkMode: (value: boolean) =>
+        setIsDarkMode(dispatch, value, updateUserPreferencesHandler),
+      setIsNavBarFixed: (value: boolean) =>
+        setIsNavBarFixed(dispatch, value, updateUserPreferencesHandler),
+      setVerticalNavColor: (value: VerticalNavColor) =>
+        setVerticalNavColor(dispatch, value, updateUserPreferencesHandler),
+      setVerticalNavItemColor: (value: VerticalNavItemColor) =>
+        setVerticalNavItemColor(dispatch, value, updateUserPreferencesHandler)
     }),
-    [dispatch]
+    [dispatch, updateUserPreferencesHandler]
   );
 
-  const value = useMemo(() => ({ state, actions }), [state, actions]);
+  const value = useMemo(
+    () => ({
+      state: {
+        ...state
+      },
+      actions
+    }),
+    [state, actions]
+  );
+
+  if (loading) {
+    return null;
+  }
 
   return <UIContext.Provider value={value}>{children}</UIContext.Provider>;
 };

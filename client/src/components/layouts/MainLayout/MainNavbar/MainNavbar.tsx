@@ -46,7 +46,7 @@ const MainNavbar = ({
       isDarkMode
     },
     actions: {
-      toggleUISettingsPanelOpen,
+      setUISettingsPanelOpen,
       setIsNavBarTransparent,
       setIsVerticalNavCollapsed
     }
@@ -73,8 +73,9 @@ const MainNavbar = ({
     */
     window.addEventListener("scroll", handleTransparentNavbar);
 
+    // TODO: Is this uncommented an infinite loop is created.
     // Call the handleTransparentNavbar function to set the state with the initial value.
-    handleTransparentNavbar();
+    // handleTransparentNavbar();
 
     // Remove event listener on cleanup
     return () => window.removeEventListener("scroll", handleTransparentNavbar);
@@ -82,8 +83,9 @@ const MainNavbar = ({
 
   const handleMiniSidenav = () =>
     setIsVerticalNavCollapsed(!isVerticalNavCollapsed);
+
   const handleConfiguratorOpen = () => {
-    toggleUISettingsPanelOpen(!isUISettingsPanelOpen);
+    setUISettingsPanelOpen(!isUISettingsPanelOpen);
   };
 
   const logoutHandler = () => loggedOut();
@@ -137,19 +139,20 @@ const MainNavbar = ({
                   {isVerticalNavCollapsed ? "menu_open" : "menu"}
                 </Icon>
               </IconButton>
-              {/* <IconButton
+              <IconButton
                 size="small"
                 disableRipple
                 color="inherit"
                 sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}>
+                onClick={handleConfiguratorOpen}
+                data-ui-settings-panel-toggle>
                 <Icon
                   sx={(theme: Theme) =>
                     iconsStyle(theme, light, isDarkMode, isNavBarTransparent)
                   }>
                   settings
                 </Icon>
-              </IconButton> */}
+              </IconButton>
               <IconButton
                 size="small"
                 color="inherit"

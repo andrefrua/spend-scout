@@ -1,4 +1,4 @@
-import Collapse from "@mui/material/Collapse";
+import Collapse, { CollapseProps } from "@mui/material/Collapse";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Icon from "@mui/material/Icon";
@@ -7,12 +7,10 @@ import { Theme } from "@mui/material/styles";
 import CustomBox from "components/mui/CustomBox";
 
 import { useUIContext } from "context/UIProvider";
+import { VerticalNavItemColor } from "generated/models/userPreferences";
 
 import { item, itemContent, itemArrow } from "./VerticalNavItem.styles";
-import {
-  VerticalNavItemColor,
-  VerticalNavItemProps
-} from "./VerticalNavItem.models";
+import { VerticalNavItemProps } from "./VerticalNavItem.models";
 
 const VerticalNavItem = ({
   color = VerticalNavItemColor.INFO,
@@ -31,7 +29,7 @@ const VerticalNavItem = ({
       <ListItem
         {...others}
         component="li"
-        sx={theme =>
+        sx={(theme: Theme) =>
           item(theme, {
             active,
             color,
@@ -68,7 +66,11 @@ const VerticalNavItem = ({
         </CustomBox>
       </ListItem>
       {children && (
-        <Collapse in={open} timeout="auto" unmountOnExit {...others}>
+        <Collapse
+          in={open}
+          timeout="auto"
+          unmountOnExit
+          {...(others as CollapseProps)}>
           {children}
         </Collapse>
       )}

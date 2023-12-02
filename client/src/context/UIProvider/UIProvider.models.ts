@@ -1,5 +1,8 @@
-import { VerticalNavColor } from "components/layouts/MainLayout/VerticalNav/VerticalNav.models";
-import { VerticalNavItemColor } from "components/layouts/MainLayout/VerticalNav/VerticalNavItem/VerticalNavItem.models";
+import {
+  UserPreferences,
+  VerticalNavColor,
+  VerticalNavItemColor
+} from "generated/models/userPreferences";
 
 /**
  * The UI state representation
@@ -15,26 +18,27 @@ export interface UIState {
 }
 
 export interface UIActions {
-  toggleUISettingsPanelOpen: (value: boolean) => void;
+  setUISettingsPanelOpen: (value: boolean) => void;
   setIsVerticalNavCollapsed: (value: boolean) => void;
   setIsDarkMode: (value: boolean) => void;
   setIsNavBarFixed: (value: boolean) => void;
   setIsNavBarTransparent: (value: boolean) => void;
-  setVerticalNavColor: (value: string) => void;
-  setVerticalNavItemColor: (value: string) => void;
+  setVerticalNavColor: (value: VerticalNavColor) => void;
+  setVerticalNavItemColor: (value: VerticalNavItemColor) => void;
 }
 
 /**
  * UI action types to be used by the uiReducer
  */
 export enum UIActionType {
-  TOGGLE_UI_SETTINGS_PANEL_OPEN = "TOGGLE_UI_SETTINGS_PANEL_OPEN",
-  TOGGLE_VERTICAL_NAVIGATION_COLLAPSED = "TOGGLE_VERTICAL_NAVIGATION_COLLAPSED",
-  TOGGLE_DARK_MODE = "TOGGLE_DARK_MODE",
-  TOGGLE_NAVIGATION_BAR_FIXED = "TOGGLE_NAVIGATION_BAR_FIXED",
-  TOGGLE_NAVIGATION_BAR_TRANSPARENT = "TOGGLE_NAVIGATION_BAR_TRANSPARENT",
-  CHANGE_VERTICAL_NAVIGATION_COLOR = "CHANGE_VERTICAL_NAVIGATION_COLOR",
-  CHANGE_VERTICAL_NAVIGATION_ITEM_COLOR = "CHANGE_VERTICAL_NAVIGATION_ITEM_COLOR"
+  SET_INITIAL_STATE = "SET_INITIAL_STATE",
+  SET_UI_SETTINGS_PANEL_OPEN = "SET_UI_SETTINGS_PANEL_OPEN",
+  SET_VERTICAL_NAVIGATION_COLLAPSED = "SET_VERTICAL_NAVIGATION_COLLAPSED",
+  SET_DARK_MODE = "SET_DARK_MODE",
+  SET_NAVIGATION_BAR_FIXED = "SET_NAVIGATION_BAR_FIXED",
+  SET_NAVIGATION_BAR_TRANSPARENT = "SET_NAVIGATION_BAR_TRANSPARENT",
+  SET_VERTICAL_NAVIGATION_COLOR = "SET_VERTICAL_NAVIGATION_COLOR",
+  SET_VERTICAL_NAVIGATION_ITEM_COLOR = "SET_VERTICAL_NAVIGATION_ITEM_COLOR"
 }
 
 /**
@@ -42,7 +46,12 @@ export enum UIActionType {
  */
 export interface UIAction {
   type: UIActionType;
-  value: boolean | string;
+  value:
+    | boolean
+    | string
+    | UserPreferences
+    | VerticalNavColor
+    | VerticalNavItemColor;
 }
 
 /**

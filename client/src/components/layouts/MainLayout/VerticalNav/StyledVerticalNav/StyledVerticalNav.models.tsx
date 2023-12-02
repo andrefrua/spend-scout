@@ -1,6 +1,6 @@
 import { Theme } from "@mui/material/styles";
 
-import { VerticalNavColor } from "../VerticalNav.models";
+import { VerticalNavColor } from "generated/models/userPreferences";
 
 export type StyledVerticalNavProps = {
   theme?: Theme | any;

@@ -7,6 +7,7 @@ export type CustomInputBaseProps = {
   error?: boolean;
   success?: boolean;
   disabled?: boolean;
+  isDarkMode?: boolean;
 };
 
 export type CustomInputProps = Omit<

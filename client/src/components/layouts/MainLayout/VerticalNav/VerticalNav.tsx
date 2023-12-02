@@ -13,6 +13,7 @@ import CustomTypography from "components/mui/CustomTypography";
 import { useUIContext } from "context/UIProvider";
 import { useBrandingContext } from "context/BrandingProvider";
 import { useNavigationContext } from "context/NavigationProvider";
+import { VerticalNavColor } from "generated/models/userPreferences";
 
 import {
   CustomRoute,
@@ -91,7 +92,9 @@ const VerticalNav = ({ ...others }: VerticalNavProps): JSX.Element => {
       setIsVerticalNavCollapsed(window.innerWidth < 1200);
 
       // TODO : No ideia what this is for...
-      setVerticalNavColor(window.innerWidth < 1200 ? "dark" : verticalNavColor);
+      setVerticalNavColor(
+        window.innerWidth < 1200 ? VerticalNavColor.DARK : verticalNavColor
+      );
     }
 
     /** 
@@ -99,8 +102,9 @@ const VerticalNav = ({ ...others }: VerticalNavProps): JSX.Element => {
     */
     window.addEventListener("resize", handleMiniSidenav);
 
+    // TODO: If this is not commented, an infinite loop occurs.
     // Call the handleMiniSidenav function to set the state with the initial value.
-    handleMiniSidenav();
+    // handleMiniSidenav();
 
     // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleMiniSidenav);

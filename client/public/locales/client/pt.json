@@ -128,6 +128,19 @@
     "noExpensesYet": "Ainda não existem despesas",
     "thanLastMonth": "que no mês anterior"
   },
+  "userPreferences": {
+    "uiConfigurator": "Configurador da UI",
+    "customizeTheApplicationUI": "Personalize a UI da aplicação",
+    "mainColor": "Cor principal",
+    "verticalPanelColor": "Cor do painel vertical",
+    "dark": "Escuro",
+    "transparent": "Transparente",
+    "white": "Branco",
+    "fixedTopBar": "Barra superior fixa",
+    "verticalPanelCollapsed": "Painel vertical recolhido",
+    "darkMode": "Modo escuro"
+  },
+
   "dummy": "Testes",
   "scheduler": "Agenda"
 }
