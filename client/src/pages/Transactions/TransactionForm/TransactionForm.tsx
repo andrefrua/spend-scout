@@ -28,8 +28,8 @@ const TransactionForm = ({
   } = useTransactionsApi();
 
   const [formData, setFormData] = useState<Transaction>({
-    transactionDate: "",
-    valueDate: "",
+    transactionDate: new Date().toISOString().split("T")[0],
+    valueDate: new Date().toISOString().split("T")[0],
     description: "",
     balance: 0,
     amount: 0,

@@ -1,25 +1,23 @@
 import dayjs from "dayjs";
 
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
-import CustomPickersLayout from "./CustomPickersLayout";
-import { CustomDatePickerProps } from "./CustomDatePicker.models";
+import CustomPickersLayout from "../CustomDatePicker/CustomPickersLayout";
+import { CustomDateTimePickerProps } from "./CustomDateTimePicker.models";
 
-const CustomDatePicker = ({
+const CustomDateTimePicker = ({
   input = {},
   ...others
-}: CustomDatePickerProps): JSX.Element => {
+}: CustomDateTimePickerProps): JSX.Element => {
   // We need to remove the value from the remaining props because the value must be formatted using dayjs
   const { value, ...otherProps } = others;
 
   return (
-    <DatePicker
+    <DateTimePicker
       {...otherProps}
       value={dayjs(others.value)}
       label={others.label}
-      slots={{
-        layout: CustomPickersLayout
-      }}
+      slots={{ layout: CustomPickersLayout }}
       slotProps={{
         textField: {
           ...input
@@ -29,4 +27,4 @@ const CustomDatePicker = ({
   );
 };
 
-export default CustomDatePicker;
+export default CustomDateTimePicker;

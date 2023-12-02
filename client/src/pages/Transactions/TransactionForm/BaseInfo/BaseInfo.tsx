@@ -27,15 +27,17 @@ const BaseInfo = (): JSX.Element => {
                 name="transactionDate"
                 as={CustomDatePicker}
                 label={t("transactions.transactionDate")}
-                onChange={(date: Date, dateISO: string) => {
-                  setFieldValue("transactionDate", dateISO);
+                onChange={(newDate: Date) => {
+                  setFieldValue(
+                    "transactionDate",
+                    newDate.toISOString().split("T")[0]
+                  );
                 }}
+                error={errors.transactionDate && touched.transactionDate}
+                success={!errors.transactionDate && values.transactionDate}
                 input={{
                   fullWidth: true,
-                  variant: "standard",
-                  label: t("transactions.transactionDate"),
-                  error: errors.transactionDate && touched.transactionDate,
-                  success: !errors.transactionDate && values.transactionDate
+                  variant: "standard"
                 }}
               />
             </Grid>
@@ -46,15 +48,17 @@ const BaseInfo = (): JSX.Element => {
                 name="valueDate"
                 as={CustomDatePicker}
                 label={t("transactions.valueDate")}
-                onChange={(date: Date, dateISO: string) => {
-                  setFieldValue("valueDate", dateISO);
+                onChange={(newDate: Date) => {
+                  setFieldValue(
+                    "valueDate",
+                    newDate.toISOString().split("T")[0]
+                  );
                 }}
+                error={errors.valueDate && touched.valueDate}
+                success={!errors.valueDate && values.valueDate}
                 input={{
                   fullWidth: true,
-                  variant: "standard",
-                  label: t("transactions.valueDate"),
-                  error: errors.valueDate && touched.valueDate,
-                  success: !errors.valueDate && values.valueDate
+                  variant: "standard"
                 }}
               />
             </Grid>
