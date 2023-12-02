@@ -25,7 +25,10 @@
     "description": "Description",
     "thereAreUnsavedChanges": "There are unsaved changes",
     "byLeavingThePageYouWillLoseTheChanges": "By leaving the page you will lose the changes, do you wish to continue?",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "select": "Select"
   },
   "routes": {
     "dashboard": "Dashboard",

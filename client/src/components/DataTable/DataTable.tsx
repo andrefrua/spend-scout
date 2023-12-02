@@ -15,9 +15,9 @@ import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
 
 import CustomPagination from "components/mui/CustomPagination";
+import ActionBar from "components/ActionBar";
 
 import { DataTableProps } from "./DataTable.models";
-import ActionBar from "./ActionBar";
 import ActionsCell from "./ActionsCell";
 import DataTableHead from "./DataTableHead";
 import DataTableBody from "./DataTableBody";
@@ -71,9 +71,8 @@ const DataTable = <T extends object>({
   onEdit,
   onDelete,
   onSelect,
-  labels,
-  getRowProps,
-  isAddButtonDisabled
+  customActionBarButton,
+  getRowProps
 }: DataTableProps<T>): JSX.Element => {
   const { defaultValue, entries } = entriesPerPage;
 
@@ -190,10 +189,10 @@ const DataTable = <T extends object>({
       {title || subTitle || onAdd ? (
         <ActionBar
           title={title}
-          subTitle={subTitle}
+          description={subTitle}
+          showSubmit={false}
           onAdd={onAdd}
-          labels={labels}
-          isAddButtonDisabled={isAddButtonDisabled}
+          customAction={customActionBarButton}
         />
       ) : null}
 

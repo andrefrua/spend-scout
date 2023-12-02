@@ -1,51 +1,68 @@
-import { Row } from "react-table";
+import { useTranslation } from "react-i18next";
 
-import IconButton from "@mui/material/IconButton";
 import Icon from "@mui/material/Icon";
+import Tooltip from "@mui/material/Tooltip";
 
-export interface ActionsCellProps<T extends object> {
-  row: Row<T>;
-  onEdit?: (row: Row<T>) => void;
-  onDelete?: (row: Row<T>) => void;
-  onSelect?: (row: Row<T>) => void;
-}
+import CustomButton from "components/mui/CustomButton";
 
-// TODO: Missing ActionsCellProps type
+import { ActionsCellProps } from "./ActionCell.models";
+
 const ActionsCell = <T extends object>({
   row,
   onEdit,
   onDelete,
   onSelect
-}: ActionsCellProps<T>) => (
-  <>
-    {onSelect && (
-      <IconButton
-        size="small"
-        disableRipple
-        color="success"
-        onClick={() => onSelect?.(row)}>
-        <Icon>check</Icon>
-      </IconButton>
-    )}
-    {onEdit && (
-      <IconButton
-        size="small"
-        disableRipple
-        color="info"
-        onClick={() => onEdit?.(row)}>
-        <Icon>edit</Icon>
-      </IconButton>
-    )}
-    {onDelete && (
-      <IconButton
-        size="small"
-        disableRipple
-        color="error"
-        onClick={() => onDelete?.(row)}>
-        <Icon>delete</Icon>
-      </IconButton>
-    )}
-  </>
-);
+}: ActionsCellProps<T>) => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      {onSelect && (
+        <Tooltip title={t("common.select")} placement="top-start">
+          <CustomButton
+            sx={{ ml: 0.5 }}
+            variant="outlined"
+            color="success"
+            iconOnly
+            onClick={(event: MouseEvent) => {
+              event.stopPropagation();
+              onSelect?.(row);
+            }}>
+            <Icon>check</Icon>
+          </CustomButton>
+        </Tooltip>
+      )}
+      {onEdit && (
+        <Tooltip title={t("common.edit")} placement="top-start">
+          <CustomButton
+            variant="outlined"
+            color="info"
+            iconOnly
+            onClick={(event: MouseEvent) => {
+              event.stopPropagation();
+              onEdit?.(row);
+            }}>
+            <Icon>edit</Icon>
+          </CustomButton>
+        </Tooltip>
+      )}
+      {onDelete && (
+        <Tooltip title={t("common.delete")} placement="top-start">
+          <CustomButton
+            sx={{ ml: 0.5 }}
+            variant="outlined"
+            color="error"
+            iconOnly
+            onClick={(event: MouseEvent) => {
+              event.stopPropagation();
+              onDelete?.(row);
+            }}>
+            <Icon>delete</Icon>
+          </CustomButton>
+        </Tooltip>
+      )}
+    </>
+  );
+};
 
 export default ActionsCell;

@@ -25,7 +25,10 @@
     "description": "Descrição",
     "thereAreUnsavedChanges": "Existem alterações não guardadas",
     "byLeavingThePageYouWillLoseTheChanges": "Ao sair da página irá perder as alterações, tem a certeza que pretende continuar?",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "select": "Seleccionar"
   },
   "routes": {
     "dashboard": "Dashboard",

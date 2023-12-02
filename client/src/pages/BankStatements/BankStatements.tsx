@@ -9,6 +9,7 @@ import CustomTypography from "components/mui/CustomTypography";
 import CustomButton from "components/mui/CustomButton";
 
 import DataTable from "components/DataTable";
+import ActionBarButton from "components/ActionBar/ActionBarButton";
 import { parseNumericValue } from "lib/utils/parseNumericValues";
 import { parseDateValueString } from "lib/utils/parseDateValueString";
 import useCategoriesApi from "hooks/useCategoriesApi";
@@ -198,6 +199,16 @@ const BankStatements = () => {
     }
   };
 
+  const renderCustomActionBarButton = () => (
+    <ActionBarButton
+      icon="save"
+      color="success"
+      onClick={saveTransactionsHandler}
+      disabled={!isSaveButtonEnabled()}>
+      {t("common.save")}
+    </ActionBarButton>
+  );
+
   return (
     <Grid container spacing={2} mb={2}>
       <Grid item xs={12}>
@@ -248,12 +259,17 @@ const BankStatements = () => {
               <Grid item xs={12} sm={2}>
                 <CustomBox
                   display="flex"
-                  flexDirection={{ xs: "column", sm: "row" }}
-                  px={{ xs: 2, sm: 0 }}>
+                  flexDirection={{ xs: "column", sm: "row" }}>
                   <CustomButton
-                    variant="gradient"
-                    color="secondary"
+                    sx={{
+                      ml: { xs: 2, sm: 1 },
+                      mt: { xs: 1, sm: 0 },
+                      mb: { xs: 1, sm: 0 }
+                    }}
+                    variant="outlined"
+                    color="success"
                     onClick={() => setIsCategoryFormModalOpen(true)}>
+                    <Icon sx={{ mr: 0.5 }}>add</Icon>
                     {t("categories.createCategory")}
                   </CustomButton>
                 </CustomBox>
@@ -278,11 +294,7 @@ const BankStatements = () => {
                   columns: bankStatementDataTableColumns,
                   rows: bankStatementsData
                 }}
-                onAdd={saveTransactionsHandler}
-                labels={{
-                  addButton: t("common.save") || ""
-                }}
-                isAddButtonDisabled={!isSaveButtonEnabled()}
+                customActionBarButton={renderCustomActionBarButton()}
                 onSelect={row => {
                   const newData = bankStatementsData.map((auxRow, index) => {
                     if (row.index === index && auxRow.categoryId) {

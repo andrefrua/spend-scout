@@ -1,3 +1,4 @@
+import React from "react";
 import { Column, Row } from "react-table";
 
 type DataTablePaginationVariant = "contained" | "gradient";
@@ -37,7 +38,6 @@ export interface DataTableProps<T extends object> {
   onEdit?: (row: Row<T>) => void;
   onDelete?: (row: Row<T>) => void;
   onSelect?: (row: Row<T>) => void;
-  labels?: { addButton?: string };
+  customActionBarButton?: React.ReactNode;
   getRowProps?: (row: Row<T>) => object;
-  isAddButtonDisabled?: boolean;
 }

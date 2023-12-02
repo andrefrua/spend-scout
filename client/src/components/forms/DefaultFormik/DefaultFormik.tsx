@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Form, Formik, FormikHelpers } from "formik";
 
 import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
 
 import CustomBox from "components/mui/CustomBox";
-import ActionBar from "components/forms/ActionBar";
+import ActionBar from "components/ActionBar";
 import useBlockNavigationPrompt from "hooks/useBlockNavigationPrompt";
 
 import ErrorBar from "../ErrorBar";
@@ -48,11 +49,15 @@ const DefaultFormik = <T extends object>({
               <Grid item xs={12}>
                 <CustomBox>
                   <Grid container spacing={3}>
-                    <ActionBar
-                      title={title}
-                      description={description}
-                      onCancel={onCancel}
-                    />
+                    <Grid item xs={12}>
+                      <Card>
+                        <ActionBar
+                          title={title}
+                          description={description}
+                          onCancel={onCancel}
+                        />
+                      </Card>
+                    </Grid>
 
                     {error && <ErrorBar error={error} />}
 
