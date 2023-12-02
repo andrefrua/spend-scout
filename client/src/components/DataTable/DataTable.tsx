@@ -166,9 +166,9 @@ const DataTable = <T extends object>({
   const [search, setSearch] = useState(globalFilter);
 
   // Search input state handle
-  const onSearchChange = useAsyncDebounce((value: number) => {
+  const onSearchChange = useAsyncDebounce((value: string) => {
     setGlobalFilter(value || undefined);
-  }, 100);
+  }, 400);
 
   // Setting the entries starting point
   const entriesStart =
@@ -199,9 +199,7 @@ const DataTable = <T extends object>({
 
       {isLoading && <DataTableLoading />}
 
-      {!isLoading && rows.length === 0 && <DataTableEmpty />}
-
-      {!isLoading && rows.length > 0 && (
+      {!isLoading && (
         <>
           {entriesPerPage || canSearch ? (
             <DataTableControls
@@ -216,35 +214,44 @@ const DataTable = <T extends object>({
             />
           ) : null}
 
-          <Table {...getTableProps()}>
-            <DataTableHead headerGroups={headerGroups} isSorted={isSorted} />
-            <DataTableBody
-              page={page}
-              prepareRow={prepareRow}
-              noEndBorder={noEndBorder}
-              tableBodyProps={getTableBodyProps()}
-              rowsLength={rows.length}
-              getRowProps={getRowProps}
-            />
-          </Table>
+          {rows.length === 0 && <DataTableEmpty />}
 
-          <DataTablePagination
-            canPreviousPage={canPreviousPage}
-            renderPagination={renderPagination}
-            canNextPage={canNextPage}
-            previousPage={previousPage}
-            nextPage={nextPage}
-            showTotalEntries={showTotalEntries}
-            pageOptions={pageOptions}
-            entriesStart={entriesStart}
-            entriesEnd={entriesEnd}
-            rowsLength={rows.length}
-            pagination={pagination}
-            customizedPageOptions={customizedPageOptions}
-            pageIndex={pageIndex}
-            handleInputPagination={handleInputPagination}
-            handleInputPaginationValue={handleInputPaginationValue}
-          />
+          {rows.length > 0 && (
+            <>
+              <Table {...getTableProps()}>
+                <DataTableHead
+                  headerGroups={headerGroups}
+                  isSorted={isSorted}
+                />
+                <DataTableBody
+                  page={page}
+                  prepareRow={prepareRow}
+                  noEndBorder={noEndBorder}
+                  tableBodyProps={getTableBodyProps()}
+                  rowsLength={rows.length}
+                  getRowProps={getRowProps}
+                />
+              </Table>
+
+              <DataTablePagination
+                canPreviousPage={canPreviousPage}
+                renderPagination={renderPagination}
+                canNextPage={canNextPage}
+                previousPage={previousPage}
+                nextPage={nextPage}
+                showTotalEntries={showTotalEntries}
+                pageOptions={pageOptions}
+                entriesStart={entriesStart}
+                entriesEnd={entriesEnd}
+                rowsLength={rows.length}
+                pagination={pagination}
+                customizedPageOptions={customizedPageOptions}
+                pageIndex={pageIndex}
+                handleInputPagination={handleInputPagination}
+                handleInputPaginationValue={handleInputPaginationValue}
+              />
+            </>
+          )}
         </>
       )}
     </TableContainer>

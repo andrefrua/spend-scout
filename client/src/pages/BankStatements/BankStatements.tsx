@@ -37,8 +37,11 @@ const BankStatements = () => {
     createCategory,
     fetchCategories
   } = useCategoriesApi();
-  const { data: transactionsData, createBulkTransactions } =
-    useTransactionsApi();
+  const {
+    data: transactionsData,
+    createBulkTransactions,
+    fetchTransactions
+  } = useTransactionsApi();
   const [firstRowHasHeaders, setFirstRowHasHeaders] = useState(true);
   const [bankStatementsData, setBankStatementsData] = useState<BankStatement[]>(
     []
@@ -116,17 +119,17 @@ const BankStatements = () => {
             convertedRow.description.includes(category.filterField)
         );
 
-        if (matchingCategory) {
-          // Set Categoria to the matching category name
-          convertedRow.categoryId = matchingCategory.id;
-          convertedRow.accepted = true;
-        }
-
         convertedRow.duplicated = isTransactionAlreadySaved(
           transactionsData,
           convertedRow as BankStatement,
           false
         );
+
+        if (matchingCategory) {
+          // Set Categoria to the matching category name
+          convertedRow.categoryId = matchingCategory.id;
+          convertedRow.accepted = !convertedRow.duplicated; // We only want to accept the row if it's not duplicated
+        }
 
         return { ...convertedRow } as BankStatement;
       });
@@ -181,6 +184,7 @@ const BankStatements = () => {
     });
 
     await createBulkTransactions(bankStatementsToSave as Transaction[]);
+    await fetchTransactions();
     setBankStatementsData([]);
     setIsSubmitting(false);
   };

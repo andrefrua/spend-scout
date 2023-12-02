@@ -112,11 +112,15 @@ export const getRowProps = (row: Row<BankStatement>) => {
   const duplicatedColor = "#ADD8E6";
   const notAcceptedColor = "#FFD1DC";
 
-  const accepted = row?.original?.accepted ? acceptedColor : notAcceptedColor;
+  const duplicatedOrNotAcceptedColor = row?.original?.duplicated
+    ? duplicatedColor
+    : notAcceptedColor;
 
   return {
     style: {
-      backgroundColor: row?.original?.duplicated ? duplicatedColor : accepted
+      backgroundColor: row?.original?.accepted
+        ? acceptedColor
+        : duplicatedOrNotAcceptedColor
     }
   };
 };

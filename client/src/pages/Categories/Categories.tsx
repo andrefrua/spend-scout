@@ -44,6 +44,7 @@ const Categories = () => {
       onAdd={addCategoryHandler}
       onEdit={editCategoryHandler}
       onDelete={deleteCategoryHandler}
+      canSearch
     />
   );
 };

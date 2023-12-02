@@ -18,7 +18,7 @@ interface DataTableControlsProps {
   canSearch: boolean;
   search: string;
   setSearch: (value: string) => void;
-  onSearchChange: (value: number) => void;
+  onSearchChange: (value: string) => void;
 }
 
 const DataTableControls = ({
@@ -70,7 +70,7 @@ const DataTableControls = ({
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const { currentTarget } = event;
               setSearch(search);
-              onSearchChange(Number(currentTarget.value));
+              onSearchChange(currentTarget.value);
             }}
           />
         </CustomBox>

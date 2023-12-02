@@ -54,6 +54,7 @@ const Transactions = () => {
       onAdd={addTransactionHandler}
       onEdit={editTransactionHandler}
       onDelete={deleteTransactionHandler}
+      canSearch
     />
   );
 };
