@@ -6,12 +6,14 @@ import Tooltip from "@mui/material/Tooltip";
 import CustomTypography from "components/mui/CustomTypography";
 import CustomBox from "components/mui/CustomBox";
 import CustomButton from "components/mui/CustomButton";
+import { formatCurrencyString } from "lib/utils/formatCurrencyString";
+
 import { TransactionProps } from "./Transaction.models";
 
 const Transaction = ({
   transactionByCategory
 }: TransactionProps): JSX.Element => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { categoryName, categoryDescription, categoryMonthlyBudget, amount } =
     transactionByCategory;
 
@@ -21,12 +23,16 @@ const Transaction = ({
   const colorBudgetCheck = isValueUnderMonthlyBudget ? "success" : "error";
   const colorAmount = isAmountPositive ? "success" : "error";
   const icon = isValueUnderMonthlyBudget ? "check" : "close";
+  const formattedMonthlyBudget = formatCurrencyString(
+    categoryMonthlyBudget ?? 0,
+    i18n.language
+  );
   const tooltipTitle = isValueUnderMonthlyBudget
     ? t("transactions.youAreWithinYourMonthlyBudgetOf", {
-        categoryMonthlyBudget
+        categoryMonthlyBudget: formattedMonthlyBudget
       })
     : t("transactions.youAreAboveYourMonthlyBudgetOf", {
-        categoryMonthlyBudget
+        categoryMonthlyBudget: formattedMonthlyBudget
       });
 
   return (
@@ -63,7 +69,7 @@ const Transaction = ({
           variant="button"
           color={colorAmount}
           fontWeight="medium">
-          {amount}
+          {formatCurrencyString(amount, i18n.language)}
         </CustomTypography>
       </CustomBox>
     </CustomBox>

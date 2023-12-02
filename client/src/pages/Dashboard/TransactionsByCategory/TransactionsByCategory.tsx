@@ -71,20 +71,6 @@ const TransactionsByCategory = ({
                   ? t("dashboard.noIncomeYet")
                   : t("dashboard.noExpensesYet")}
               </CustomTypography>
-              {/* {description && (
-            <CustomTypography
-              variant="caption"
-              color="text"
-              fontWeight="regular">
-              {description}
-            </CustomTypography>
-          )}
-          {description && !value ? null : <Divider />}
-          {value && (
-            <CustomTypography variant="h5" fontWeight="medium">
-              {value}
-            </CustomTypography>
-          )} */}
             </CustomBox>
           </CustomBox>
         )}

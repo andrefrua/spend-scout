@@ -1,9 +1,12 @@
+import { useTranslation } from "react-i18next";
+
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
 
 import CustomBox from "components/mui/CustomBox";
 import CustomTypography from "components/mui/CustomTypography";
+import { formatCurrencyString } from "lib/utils/formatCurrencyString";
 
 import { ComplexStatisticsCardProps } from "./ComplexStatisticsCard.models";
 
@@ -18,6 +21,7 @@ const ComplexStatisticsCard = ({
   },
   icon
 }: ComplexStatisticsCardProps): JSX.Element => {
+  const { i18n } = useTranslation();
   return (
     <Card>
       <CustomBox display="flex" justifyContent="space-between" pt={1} px={2}>
@@ -41,7 +45,9 @@ const ComplexStatisticsCard = ({
           <CustomTypography variant="button" fontWeight="light" color="text">
             {title}
           </CustomTypography>
-          <CustomTypography variant="h4">{count ?? 0}</CustomTypography>
+          <CustomTypography variant="h4">
+            {formatCurrencyString(Number(count) ?? 0, i18n.language)}
+          </CustomTypography>
         </CustomBox>
       </CustomBox>
       <Divider />
