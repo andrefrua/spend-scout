@@ -2,6 +2,7 @@ import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { API_URL } from "config";
+import { useAuthContext } from "context/AuthProvider";
 
 export interface useApiProps {
   token?: string | null;
@@ -9,6 +10,10 @@ export interface useApiProps {
 
 const useApi = ({ token }: useApiProps = { token: undefined }) => {
   const { i18n } = useTranslation();
+  const {
+    state: { isAuthenticated },
+    actions: { loggedOut }
+  } = useAuthContext();
 
   const headers = useMemo(() => {
     const localHeaders: {
@@ -25,12 +30,26 @@ const useApi = ({ token }: useApiProps = { token: undefined }) => {
     return localHeaders;
   }, [token, i18n.language]);
 
+  const isTokenExpired = useCallback(
+    async (response: Response) => {
+      if (
+        isAuthenticated &&
+        (response.status === 401 || response.status === 403)
+      ) {
+        loggedOut();
+      }
+    },
+    [loggedOut, isAuthenticated]
+  );
+
   const get = useCallback(
     async (endpoint: string) => {
       const response = await fetch(`${API_URL}${endpoint}`, {
         method: "GET",
         headers
       });
+
+      await isTokenExpired(response);
 
       if (!response.ok) {
         const responseError = await response.text();
@@ -39,7 +58,7 @@ const useApi = ({ token }: useApiProps = { token: undefined }) => {
 
       return response.json();
     },
-    [headers]
+    [headers, isTokenExpired]
   );
 
   const post = useCallback(
@@ -53,6 +72,8 @@ const useApi = ({ token }: useApiProps = { token: undefined }) => {
         body: JSON.stringify(data)
       });
 
+      await isTokenExpired(response);
+
       if (!response.ok) {
         const responseError = await response.text();
         throw new Error(responseError);
@@ -60,7 +81,7 @@ const useApi = ({ token }: useApiProps = { token: undefined }) => {
 
       return response.json();
     },
-    [headers]
+    [headers, isTokenExpired]
   );
 
   const put = useCallback(
@@ -74,6 +95,8 @@ const useApi = ({ token }: useApiProps = { token: undefined }) => {
         body: JSON.stringify(data)
       });
 
+      await isTokenExpired(response);
+
       if (!response.ok) {
         const responseError = await response.text();
         throw new Error(responseError);
@@ -81,7 +104,7 @@ const useApi = ({ token }: useApiProps = { token: undefined }) => {
 
       return response.json();
     },
-    [headers]
+    [headers, isTokenExpired]
   );
 
   const remove = useCallback(
@@ -91,12 +114,14 @@ const useApi = ({ token }: useApiProps = { token: undefined }) => {
         headers
       });
 
+      await isTokenExpired(response);
+
       if (!response.ok) {
         const responseError = await response.text();
         throw new Error(responseError);
       }
     },
-    [headers]
+    [headers, isTokenExpired]
   );
 
   return {
