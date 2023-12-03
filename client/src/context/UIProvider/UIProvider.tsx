@@ -3,8 +3,7 @@ import {
   useReducer,
   useMemo,
   useCallback,
-  useEffect,
-  useState
+  useEffect
 } from "react";
 
 import useUserPreferencesApi from "hooks/useUserPreferencesApi";
@@ -67,8 +66,7 @@ const initialUIActions: UIActions = {
  */
 const uiReducer = (state: UIState, action: UIAction): UIState => {
   switch (action.type) {
-    // TODO: Set this in the actions type
-    case "SET_INITIAL_STATE":
+    case UIActionType.SET_INITIAL_STATE:
       return { ...state, ...(action.value as UserPreferences) };
     case UIActionType.SET_UI_SETTINGS_PANEL_OPEN:
       return { ...state, isUISettingsPanelOpen: action.value as boolean };
@@ -112,7 +110,7 @@ UIContext.displayName = "UIContext";
 const UIProvider = ({ children }: UIProviderProps) => {
   const { data: userPreferences, updateUserPreferences } =
     useUserPreferencesApi();
-  const [loading, setLoading] = useState(true);
+
   const [state, dispatch] = useReducer(uiReducer, {
     ...initialUIState,
     ...(userPreferences || {}) // Use userPreferences if available
@@ -122,7 +120,6 @@ const UIProvider = ({ children }: UIProviderProps) => {
   useEffect(() => {
     if (userPreferences) {
       setInitialState(dispatch, userPreferences);
-      setLoading(false);
     }
   }, [userPreferences]);
 
@@ -176,10 +173,6 @@ const UIProvider = ({ children }: UIProviderProps) => {
     }),
     [state, actions]
   );
-
-  if (loading) {
-    return null;
-  }
 
   return <UIContext.Provider value={value}>{children}</UIContext.Provider>;
 };
