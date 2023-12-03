@@ -113,6 +113,7 @@ const getTransactionsByCategoryType = async (
 ): Promise<TransactionByCategory[]> =>
   (await Transaction.findAll({
     attributes: [
+      [col("Category.id"), "categoryId"],
       [col("Category.name"), "categoryName"],
       [col("Category.description"), "categoryDescription"],
       [col("Category.monthlyBudget"), "categoryMonthlyBudget"],
@@ -125,7 +126,7 @@ const getTransactionsByCategoryType = async (
       },
       "$Category.type$": categoryType // Filter for expense categories
     },
-    group: [col("Category.name"), col("Category.description"), col("Category.monthlyBudget")],
+    group: [col("Category.id"), col("Category.name"), col("Category.description"), col("Category.monthlyBudget")],
     include: [{ model: Category, attributes: [] }]
   })) as unknown as TransactionByCategory[];
 

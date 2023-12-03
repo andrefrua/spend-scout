@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import Icon from "@mui/material/Icon";
@@ -9,13 +10,17 @@ import CustomButton from "components/mui/CustomButton";
 import { formatCurrencyString } from "lib/utils/formatCurrencyString";
 
 import { TransactionProps } from "./Transaction.models";
+import DetailsModal from "./DetailsModal";
 
 const Transaction = ({
-  transactionByCategory
+  transactionByCategory,
+  selectedDate
 }: TransactionProps): JSX.Element => {
   const { t, i18n } = useTranslation();
   const { categoryName, categoryDescription, categoryMonthlyBudget, amount } =
     transactionByCategory;
+
+  const [isDetailsFormModalOpen, setIsDetailsFormModalOpen] = useState(false);
 
   const isValueUnderMonthlyBudget = amount * -1 <= (categoryMonthlyBudget ?? 0);
   const isAmountPositive = amount > 0;
@@ -65,13 +70,36 @@ const Transaction = ({
             </CustomTypography>
           </CustomBox>
         </CustomBox>
-        <CustomTypography
-          variant="button"
-          color={colorAmount}
-          fontWeight="medium">
-          {formatCurrencyString(amount, i18n.language)}
-        </CustomTypography>
+        <CustomBox display="flex" alignItems="center">
+          <CustomTypography
+            variant="button"
+            color={colorAmount}
+            fontWeight="medium">
+            {formatCurrencyString(amount, i18n.language)}
+          </CustomTypography>
+          <Tooltip title={t("dashboard.details")} placement="right-end">
+            <CustomButton
+              sx={{ ml: 1 }}
+              variant="outlined"
+              color="info"
+              iconOnly
+              onClick={() => {
+                setIsDetailsFormModalOpen(true);
+              }}>
+              <Icon>search</Icon>
+            </CustomButton>
+          </Tooltip>
+        </CustomBox>
       </CustomBox>
+
+      <DetailsModal
+        open={isDetailsFormModalOpen}
+        onClose={() => {
+          setIsDetailsFormModalOpen(false);
+        }}
+        transactionByCategory={transactionByCategory}
+        selectedDate={selectedDate}
+      />
     </CustomBox>
   );
 };

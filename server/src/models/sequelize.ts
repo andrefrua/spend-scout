@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize";
 
-
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 } else {
@@ -16,7 +15,7 @@ console.log(
 );
 const databaseUrl =
   env === "production"
-  ? `postgres://postgres:${process.env.DB_PASSWORD}@${process.env.DB_HOSTNAME}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+    ? `postgres://postgres:${process.env.DB_PASSWORD}@${process.env.DB_HOSTNAME}:${process.env.DB_PORT}/${process.env.DB_NAME}`
     : "postgres://postgres:AR_postgres@localhost:5432/spend-scout";
 
 console.info(`STARTING IN "${env}" MODE!`);

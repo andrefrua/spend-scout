@@ -129,7 +129,10 @@
     "amount": "Valor",
     "noIncomeYet": "Ainda não existem rendimentos",
     "noExpensesYet": "Ainda não existem despesas",
-    "thanLastMonth": "que no mês anterior"
+    "thanLastMonth": "que no mês anterior",
+    "details": "Detalhes",
+    "transactionDetails": "Detalhes de transacções",
+    "transactionDetailsBySelectedMonth": "Detalhes de transacções do mês seleccionado"
   },
   "userPreferences": {
     "uiConfigurator": "Configurador da UI",

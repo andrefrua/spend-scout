@@ -9,7 +9,7 @@ const useDashboardApi = () => {
   const {
     state: { token }
   } = useAuthContext();
-  const { get } = useApi({ token });
+  const { get, post } = useApi({ token });
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,10 +34,35 @@ const useDashboardApi = () => {
     [get]
   );
 
+  const fetchTransactionsByCategoryAndDate = useCallback(
+    async (selectedDate: Date, categoryId: string) => {
+      try {
+        setIsLoading(true);
+
+        const transactions = await post(
+          "/dashboard/transactionsByCategoryTypeAndDate",
+          {
+            selectedDate: selectedDate.toISOString().split("T")[0],
+            categoryId
+          }
+        );
+
+        return transactions;
+      } catch (catchedError) {
+        setError((catchedError as Error).message);
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [post]
+  );
+
   return {
     isLoading,
     error,
-    fetchDashboard
+    fetchDashboard,
+    fetchTransactionsByCategoryAndDate
   };
 };
 

@@ -129,7 +129,10 @@
     "amount": "Amount",
     "noIncomeYet": "No income yet",
     "noExpensesYet": "No expenses yet",
-    "thanLastMonth": "than last month"
+    "thanLastMonth": "than last month",
+    "details": "Details",
+    "transactionDetails": "Transaction details",
+    "transactionDetailsBySelectedMonth": "Transaction details by selected month"
   },
   "userPreferences": {
     "uiConfigurator": "UI configurator",

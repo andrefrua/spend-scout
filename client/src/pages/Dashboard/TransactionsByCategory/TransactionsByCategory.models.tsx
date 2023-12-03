@@ -5,4 +5,5 @@ export interface TransactionsByCategoryProps {
   title: string;
   rows: TransactionByCategory[];
   categoryType: CategoryType;
+  selectedDate: Date;
 }

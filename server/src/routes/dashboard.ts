@@ -1,4 +1,5 @@
 import express, { Response, Router } from "express";
+import { Op } from "sequelize";
 
 import { authenticateToken } from "../helpers/auth";
 import { HttpCode } from "../helpers/httpCodes";
@@ -13,32 +14,9 @@ import {
   calculatePercentageChange,
   createDashboardData
 } from "../helpers/dashboard";
+import Transaction from "../models/transaction";
 
 const router: Router = express.Router();
-
-// const calculatePercentageChange = (currentPeriodData, previousPeriodData) => {
-//   const percentageChangeData = currentPeriodData.map((currentCategory) => {
-//     const previousCategory = previousPeriodData.find(
-//       (prevCategory) => prevCategory.categoryName === currentCategory.categoryName
-//     );
-
-//     const currentTotal = currentCategory.totalAmount || 0;
-//     const previousTotal = (previousCategory && previousCategory.totalAmount) || 0;
-
-//     const percentageChange =
-//       previousTotal === 0
-//         ? 0 // Avoid division by zero
-//         : ((currentTotal - previousTotal) / previousTotal) * 100;
-
-//     return {
-//       categoryName: currentCategory.categoryName,
-//       totalAmount: currentTotal,
-//       percentageChange,
-//     };
-//   });
-
-//   return percentageChangeData;
-// };
 
 /**
  * Get transaction summaries for the selected date ( the month of the selected date will be used ).
@@ -115,6 +93,48 @@ router.get(
       };
 
       response.status(HttpCode.OK).send(dashboardData);
+    } catch (error) {
+      returnAndLogError(
+        request,
+        response,
+        error as Error,
+        request.t("transactions.errorRetrievingCurrentMonthSummary")
+      );
+    }
+  }
+);
+
+router.post(
+  "/dashboard/transactionsByCategoryTypeAndDate",
+  authenticateToken,
+  async (request: AuthenticatedRequest, response: Response) => {
+    try {
+      const { selectedDate, categoryId } = request.body;
+      const userId = request.user?.id || "";
+
+      const newDate = new Date(selectedDate);
+
+      const startDate = new Date(newDate.getFullYear(), newDate.getMonth(), 1);
+      const endDate = new Date(
+        newDate.getFullYear(),
+        newDate.getMonth() + 1,
+        0
+      );
+
+      // Define the search criteria
+      const searchCriteria = {
+        userId,
+        transactionDate: {
+          [Op.between]: [startDate, endDate]
+        },
+        "$Transaction.categoryId$": categoryId
+      };
+
+      const transactions = await Transaction.findAll({
+        where: searchCriteria
+      });
+
+      response.status(HttpCode.OK).send(transactions);
     } catch (error) {
       returnAndLogError(
         request,

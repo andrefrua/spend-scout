@@ -15,7 +15,7 @@ import YearMonthSelector from "./YearMonthSelector";
 const Dashboard = () => {
   const { t } = useTranslation();
   const [data, setData] = useState<DashboardData | null>();
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const { isLoading, error, fetchDashboard } = useDashboardApi();
 
   useEffect(() => {
@@ -145,6 +145,7 @@ const Dashboard = () => {
               title={t("dashboard.expensesByCategory")}
               rows={data.expenseTransactionsByCategory}
               categoryType={CategoryType.Expense}
+              selectedDate={selectedDate}
             />
           </Grid>
           <Grid item xs={6}>
@@ -152,6 +153,7 @@ const Dashboard = () => {
               title={t("dashboard.incomeByCategory")}
               rows={data.incomeTransactionsByCategory}
               categoryType={CategoryType.Income}
+              selectedDate={selectedDate}
             />
           </Grid>
         </Grid>

@@ -1,6 +1,7 @@
 import { Transaction } from "./transaction";
 
 export interface TransactionByCategory {
+  categoryId: string;
   categoryName: string;
   categoryDescription: string;
   categoryMonthlyBudget?: number;

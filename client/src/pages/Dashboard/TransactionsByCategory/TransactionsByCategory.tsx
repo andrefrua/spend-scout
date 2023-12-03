@@ -15,7 +15,8 @@ import { TransactionsByCategoryProps } from "./TransactionsByCategory.models";
 const TransactionsByCategory = ({
   title = "",
   rows = [],
-  categoryType
+  categoryType,
+  selectedDate
 }: TransactionsByCategoryProps): JSX.Element => {
   const { t } = useTranslation();
   const {
@@ -48,7 +49,13 @@ const TransactionsByCategory = ({
             sx={{ listStyle: "none" }}>
             {rows.map((row, index) => {
               const key = `${row.categoryName}-${index}`;
-              return <Transaction key={key} transactionByCategory={row} />;
+              return (
+                <Transaction
+                  key={key}
+                  transactionByCategory={row}
+                  selectedDate={selectedDate}
+                />
+              );
             })}
           </CustomBox>
         ) : (
