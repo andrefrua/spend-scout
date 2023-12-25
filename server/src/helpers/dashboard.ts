@@ -126,7 +126,12 @@ const getTransactionsByCategoryType = async (
       },
       "$Category.type$": categoryType // Filter for expense categories
     },
-    group: [col("Category.id"), col("Category.name"), col("Category.description"), col("Category.monthlyBudget")],
+    group: [
+      col("Category.id"),
+      col("Category.name"),
+      col("Category.description"),
+      col("Category.monthlyBudget")
+    ],
     include: [{ model: Category, attributes: [] }]
   })) as unknown as TransactionByCategory[];
 

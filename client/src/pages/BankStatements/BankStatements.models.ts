@@ -17,4 +17,5 @@ export interface SimplifiedTransaction {
   balance: number;
   amount: number;
   categoryId?: string;
+  observations: string;
 }

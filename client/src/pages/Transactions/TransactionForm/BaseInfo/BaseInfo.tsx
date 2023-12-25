@@ -126,6 +126,22 @@ const BaseInfo = (): JSX.Element => {
                 )}
               />
             </Grid>
+
+            <Grid item xs={12}>
+              <FormField
+                type="text"
+                name="observations"
+                multiline
+                // rows={4}
+                label={t("common.observations")}
+                error={errors.observations && touched.observations}
+                success={
+                  !errors.observations &&
+                  values.observations &&
+                  values.observations.length > 0
+                }
+              />
+            </Grid>
           </Grid>
         </CustomBox>
       </Card>

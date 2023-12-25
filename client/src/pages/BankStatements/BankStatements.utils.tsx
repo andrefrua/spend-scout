@@ -136,7 +136,8 @@ export const simplifyTransaction = (
     valueDate: new Date(originalObj.valueDate).toISOString().split("T")[0],
     description: originalObj.description,
     balance: Number(originalObj.balance),
-    amount: Number(originalObj.amount)
+    amount: Number(originalObj.amount),
+    observations: originalObj.observations || ""
   };
 
   if (includeCategory) {

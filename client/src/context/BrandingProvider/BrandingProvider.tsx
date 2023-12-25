@@ -1,9 +1,4 @@
-import { useUIContext } from "context/UIProvider";
 import { createContext, useReducer, useMemo } from "react";
-
-// Images
-import logoLight from "assets/images/logo-light.png";
-import logoDark from "assets/images/logo-dark.png";
 
 import {
   BrandingState,

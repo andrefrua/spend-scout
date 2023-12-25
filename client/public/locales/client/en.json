@@ -111,7 +111,9 @@
     "confirmRecordDuplication": "The record '{{description}}' and value {{amount}} already exists. Do you want to add it again?",
     "accepted": "Accepted",
     "duplicated": "Duplicated",
-    "notAccepted": "Not accepted"
+    "notAccepted": "Not accepted",
+    "addComment": "Add comment",
+    "editComment": "Edit comment"
   },
   "yearMonthSelector": {
     "selectYear": "Select year",

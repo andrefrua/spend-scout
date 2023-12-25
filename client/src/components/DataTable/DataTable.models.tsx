@@ -40,4 +40,5 @@ export interface DataTableProps<T extends object> {
   onSelect?: (row: Row<T>) => void;
   customActionBarButton?: React.ReactNode;
   getRowProps?: (row: Row<T>) => object;
+  customRowActions?: (row: Row<T>) => React.ReactNode;
 }

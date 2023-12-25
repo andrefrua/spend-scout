@@ -171,7 +171,8 @@ router.post(
         description,
         balance,
         amount,
-        categoryId
+        categoryId,
+        observations
       } = request.body;
       const userId = request.user?.id || "";
 
@@ -196,7 +197,8 @@ router.post(
         description,
         balance,
         amount,
-        categoryId
+        categoryId,
+        observations
       });
 
       response.status(HttpCode.OK).send({ id: transaction.id });
@@ -230,7 +232,8 @@ router.put(
         description,
         balance,
         amount,
-        categoryId
+        categoryId,
+        observations
       } = request.body;
       const userId = request.user?.id;
 
@@ -264,6 +267,7 @@ router.put(
       transaction.balance = balance;
       transaction.amount = amount;
       transaction.categoryId = categoryId;
+      transaction.observations = observations;
 
       await transaction.save(); // Save the updated transaction
 
@@ -309,7 +313,8 @@ router.post(
           description,
           balance,
           amount,
-          categoryId
+          categoryId,
+          observations
         } = transactionData;
 
         // Check if the specified category exists
@@ -328,7 +333,8 @@ router.post(
           description,
           balance,
           amount,
-          categoryId
+          categoryId,
+          observations
         });
 
         createdTransactionIds.push(transaction.id);

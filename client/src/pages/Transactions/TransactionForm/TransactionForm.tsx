@@ -33,7 +33,8 @@ const TransactionForm = ({
     description: "",
     balance: 0,
     amount: 0,
-    categoryId: ""
+    categoryId: "",
+    observations: ""
   });
 
   // TODO: REmove embeddedMode

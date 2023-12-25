@@ -111,7 +111,9 @@
     "confirmRecordDuplication": "O registo '{{description}}' e valor {{amount}} já existe. Confirme que o quer adicionar novamente?",
     "accepted": "Aceite",
     "duplicated": "Duplicado",
-    "notAccepted": "Não aceite"
+    "notAccepted": "Não aceite",
+    "addComment": "Adicionar comentário",
+    "editComment": "Editar comentário"
   },
   "yearMonthSelector": {
     "selectYear": "Seleccione o ano",

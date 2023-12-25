@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Row } from "react-table";
 
 import { Card, Grid, Icon, Checkbox, Stack } from "@mui/material";
 
@@ -28,6 +29,8 @@ import {
 import { BankStatement, SimplifiedTransaction } from "./BankStatements.models";
 import CategoryModal from "./CategoryModal";
 import Legend from "./Legend";
+import CustomRowActions from "./CustomRowActions";
+import ObservationsModal from "./ObservationsModal";
 
 const BankStatements = () => {
   const { t, i18n } = useTranslation();
@@ -48,6 +51,9 @@ const BankStatements = () => {
     []
   );
   const [isCategoryFormModalOpen, setIsCategoryFormModalOpen] = useState(false);
+  const [isObservationsModalOpen, setIsObservationsModalOpen] = useState(false);
+  const [editingObservationRow, setEditingObservationRow] =
+    useState<Row<BankStatement> | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const bankStatementDataTableColumns = useMemo(
@@ -132,6 +138,8 @@ const BankStatements = () => {
           convertedRow.accepted = !convertedRow.duplicated; // We only want to accept the row if it's not duplicated
         }
 
+        convertedRow.observations = "";
+
         return { ...convertedRow } as BankStatement;
       });
 
@@ -199,6 +207,23 @@ const BankStatements = () => {
     }
   };
 
+  const submitObservationsHandler = async ({
+    observations
+  }: {
+    observations: string;
+  }) => {
+    const newData = bankStatementsData.map((auxRow, index) => {
+      if (editingObservationRow?.index === index) {
+        return { ...auxRow, observations };
+      }
+      return auxRow;
+    });
+
+    setEditingObservationRow(null);
+    setIsObservationsModalOpen(false);
+    setBankStatementsData(newData);
+  };
+
   const renderCustomActionBarButton = () => (
     <ActionBarButton
       icon="save"
@@ -208,6 +233,23 @@ const BankStatements = () => {
       {t("common.save")}
     </ActionBarButton>
   );
+
+  const renderCustomRowActions = (row: Row<BankStatement>) => {
+    return (
+      <CustomRowActions
+        onClick={() => {
+          setEditingObservationRow(row);
+          setIsObservationsModalOpen(true);
+        }}
+        icon={row.original.observations === "" ? "add_comment" : "comment"}
+        title={
+          row.original.observations === ""
+            ? t("bankStatements.addComment")
+            : t("bankStatements.editComment")
+        }
+      />
+    );
+  };
 
   return (
     <Grid container spacing={2} mb={2}>
@@ -316,6 +358,7 @@ const BankStatements = () => {
                   setBankStatementsData(newData);
                 }}
                 getRowProps={getRowProps}
+                customRowActions={renderCustomRowActions}
               />
             </>
           )}
@@ -329,6 +372,18 @@ const BankStatements = () => {
           if (reason !== "backdropClick") {
             // We only want to close the modal when actually clicking the close or submit button.
             setIsCategoryFormModalOpen(false);
+          }
+        }}
+      />
+
+      <ObservationsModal
+        open={isObservationsModalOpen}
+        observations={editingObservationRow?.original.observations || ""}
+        onSubmit={submitObservationsHandler}
+        onClose={(reason: string) => {
+          if (reason !== "backdropClick") {
+            // We only want to close the modal when actually clicking the close or submit button.
+            setIsObservationsModalOpen(false);
           }
         }}
       />

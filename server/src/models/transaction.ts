@@ -18,6 +18,7 @@ class Transaction
   public balance!: number;
   public amount!: number;
   public categoryId!: string;
+  public observations!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -52,6 +53,10 @@ Transaction.init(
     },
     amount: {
       type: DataTypes.DECIMAL(10, 2),
+      allowNull: false
+    },
+    observations: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     categoryId: {

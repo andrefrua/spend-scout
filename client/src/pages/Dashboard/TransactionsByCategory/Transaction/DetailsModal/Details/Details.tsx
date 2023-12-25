@@ -14,7 +14,7 @@ interface DetailsProps {
   selectedDate: Date;
 }
 
-export const Details = ({
+const Details = ({
   onClose,
   transactionByCategory,
   selectedDate

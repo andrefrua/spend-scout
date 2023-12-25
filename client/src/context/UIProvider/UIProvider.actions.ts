@@ -13,10 +13,8 @@ const setInitialState = (
   value: UserPreferences
 ) => dispatch({ type: UIActionType.SET_INITIAL_STATE, value });
 
-const setUISettingsPanelOpen = (
-  dispatch: Dispatch<UIAction>,
-  value: boolean
-) => dispatch({ type: UIActionType.SET_UI_SETTINGS_PANEL_OPEN, value });
+const setUISettingsPanelOpen = (dispatch: Dispatch<UIAction>, value: boolean) =>
+  dispatch({ type: UIActionType.SET_UI_SETTINGS_PANEL_OPEN, value });
 
 const setIsNavBarTransparent = (dispatch: Dispatch<UIAction>, value: boolean) =>
   dispatch({ type: UIActionType.SET_NAVIGATION_BAR_TRANSPARENT, value });

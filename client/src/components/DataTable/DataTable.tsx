@@ -33,7 +33,8 @@ const actionsCellProps = {
 const actionsCellColumn = <T extends object>(
   onEdit?: (row: Row<T>) => void,
   onDelete?: (row: Row<T>) => void,
-  onSelect?: (row: Row<T>) => void
+  onSelect?: (row: Row<T>) => void,
+  customRowActions?: (row: Row<T>) => React.ReactNode
 ): Column<T>[] => [
   {
     Header: "",
@@ -47,6 +48,7 @@ const actionsCellColumn = <T extends object>(
         onEdit={onEdit}
         onDelete={onDelete}
         onSelect={onSelect}
+        customRowActions={customRowActions}
       />
     )
   }
@@ -72,7 +74,8 @@ const DataTable = <T extends object>({
   onDelete,
   onSelect,
   customActionBarButton,
-  getRowProps
+  getRowProps,
+  customRowActions
 }: DataTableProps<T>): JSX.Element => {
   const { defaultValue, entries } = entriesPerPage;
 
@@ -80,11 +83,14 @@ const DataTable = <T extends object>({
     const baseColumns = table.columns;
 
     if (onEdit || onDelete || onSelect) {
-      return [...baseColumns, ...actionsCellColumn(onEdit, onDelete, onSelect)];
+      return [
+        ...baseColumns,
+        ...actionsCellColumn(onEdit, onDelete, onSelect, customRowActions)
+      ];
     }
 
     return baseColumns;
-  }, [table, onEdit, onDelete, onSelect]);
+  }, [table, onEdit, onDelete, onSelect, customRowActions]);
   const data = useMemo<T[]>(() => table.rows, [table]);
 
   const tableInstance = useTable(

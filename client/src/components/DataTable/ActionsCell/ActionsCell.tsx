@@ -11,7 +11,8 @@ const ActionsCell = <T extends object>({
   row,
   onEdit,
   onDelete,
-  onSelect
+  onSelect,
+  customRowActions
 }: ActionsCellProps<T>) => {
   const { t } = useTranslation();
 
@@ -61,6 +62,7 @@ const ActionsCell = <T extends object>({
           </CustomButton>
         </Tooltip>
       )}
+      {customRowActions && customRowActions(row)}
     </>
   );
 };

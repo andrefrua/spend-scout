@@ -7,4 +7,5 @@ export interface Transaction {
   balance: number;
   amount: number;
   categoryId: string;
+  observations: string;
 }
